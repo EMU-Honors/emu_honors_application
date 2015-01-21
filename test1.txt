@@ -1,1 +1,3 @@
 This is my first attempt of playing around, since I have no idea what is going on.
+
+I also just hit revert on the README file and I am not sure what that will do.
