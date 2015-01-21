@@ -1,2 +1,2 @@
 # emu_honors_application
-The Eastern Michigan University Honors College Application
+the emu honors college application
