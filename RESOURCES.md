@@ -1,2 +1,2 @@
-jetty mobile
-i-jetty
+* jetty mobile
+* i-jetty
