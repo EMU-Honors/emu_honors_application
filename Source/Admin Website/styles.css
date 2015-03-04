@@ -1,0 +1,17 @@
+#container {
+    border: medium none;
+    font: 13px "Lucida Grande",Verdana,Arial,Helvetica,sans-serif;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 0;
+    text-align: center;
+    width: 940px;
+}
+
+body {
+    background-color: #e1e1e1;
+}
+
+#requirements {
+  text-align: left;
+}

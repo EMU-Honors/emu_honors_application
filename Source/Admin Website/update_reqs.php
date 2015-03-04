@@ -10,6 +10,7 @@ if ($_SESSION['logged_in'] != 'admin') {
 <html>
   <head>
     <title>Honor's Application Administration</title>
+    <link type="text/css" rel="stylesheet" href="styles.css">
     <script>
     var numberOfRequirements = 0;
 
@@ -68,6 +69,7 @@ if ($_SESSION['logged_in'] != 'admin') {
   </head>
   <body>
     <div id="container">
+      <img alt="" src="header.png">
       <form action="" method="post">
         <p>Year: <?="2007"?></p>
         <div id="requirements"></div>
