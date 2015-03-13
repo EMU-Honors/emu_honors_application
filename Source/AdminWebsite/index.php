@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if ($_POST['username'] == 'admin' && $_POST['password'] == 'admin') {
+if ($_POST['username'] == 'Honors' && $_POST['password'] == 'password') {
   $_SESSION['logged_in'] = 'admin';
 }
 ?>
