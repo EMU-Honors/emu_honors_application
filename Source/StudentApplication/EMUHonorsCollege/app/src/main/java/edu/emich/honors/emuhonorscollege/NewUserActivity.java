@@ -4,16 +4,20 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
+public class NewUserActivity extends ActionBarActivity {
 
-public class MainActivity extends ActionBarActivity {
-
+    private Button submitButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
+        setContentView(R.layout.new_user);
 
+        submitButton = (Button) findViewById(R.id.new_user_submit);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -35,5 +39,10 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void submitClick(View view) {
+        Toast.makeText(this, "Thank you!", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

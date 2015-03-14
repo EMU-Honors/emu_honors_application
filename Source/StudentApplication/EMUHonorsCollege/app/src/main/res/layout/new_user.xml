@@ -16,12 +16,42 @@
         tools:context=".MainActivity">
 
         <EditText
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:layout_gravity="center"
+            android:minWidth="225dp" />
+
+        <EditText
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:layout_gravity="center"
+        android:minWidth="225dp" />
+
+        <EditText
+        android:id="@+id/confirm_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        android:layout_gravity="center"
+        android:minWidth="225dp" />
+
+
+
+        <EditText
             android:id="@+id/firstName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="First Name"
             android:inputType="textPersonName"
-            android:minWidth="225dp" />
+            android:minWidth="225dp"
+            android:layout_gravity="center"/>
 
         <EditText
             android:id="@+id/lastName"
@@ -29,7 +59,7 @@
             android:layout_height="wrap_content"
             android:hint="Last Name"
             android:inputType="textPersonName"
-
+            android:layout_gravity="center"
             android:minWidth="225dp" />
 
         <EditText
@@ -38,32 +68,7 @@
             android:layout_height="wrap_content"
             android:hint="EID (numbers only)"
             android:inputType="number"
-
-            android:minWidth="225dp" />
-
-        <EditText
-            android:id="@+id/username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="User Name"
-
-            android:minWidth="225dp" />
-
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Password"
-            android:inputType="textPassword"
-
-            android:minWidth="225dp" />
-
-        <EditText
-            android:id="@+id/email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
+            android:layout_gravity="center"
             android:minWidth="225dp" />
 
         <EditText
@@ -71,13 +76,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Handbook Year"
+            android:layout_gravity="center"
             android:inputType="number"
             android:minWidth="225dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select your Honors Programs:" />
+            android:text="Select your Honors Type(s):" />
 
         <CheckBox
             android:id="@+id/universityHonorsCheckBox"
@@ -96,27 +108,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Highest Honors" />
-
-        <CheckBox
-            android:id="@+id/fullHonorsCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Full Honors" />
-
+        </LinearLayout>
 
         <EditText
             android:id="@+id/expectedGraduation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Expected Graduation"
+            android:layout_gravity="center"
             android:inputType="date"
             android:minWidth="225dp" />
+
 
         <EditText
             android:id="@+id/major"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Major"
+            android:layout_gravity="center"
             android:inputType="textAutoComplete"
             android:minWidth="225dp" />
 
@@ -124,18 +133,18 @@
             android:id="@+id/minor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:hint="Minor"
             android:inputType="textAutoComplete"
             android:minWidth="225dp" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/new_user_submit"
             android:layout_width="wrap_content"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:minWidth="225dp"
-            android:singleLine="true"
             android:text="Submit"
-            android:onClick=""/>
+            android:onClick="submitClick"/>
 
     </LinearLayout>
 

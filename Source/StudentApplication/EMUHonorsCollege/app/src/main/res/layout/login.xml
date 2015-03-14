@@ -40,10 +40,10 @@
             android:layout_height="wrap_content"
             android:text="New User"
             android:gravity="center"
-            android:id="@+id/login_new_user" />
+            android:id="@+id/login_new_user"
+            android:onClick="newUser"/>
 
         <Button
-            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Submit"
@@ -62,7 +62,6 @@
         android:layout_below="@+id/linearLayout">
 
         <Button
-            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Forgot Password?"
