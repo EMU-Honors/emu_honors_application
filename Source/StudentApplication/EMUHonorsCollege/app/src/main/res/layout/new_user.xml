@@ -1,0 +1,142 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/hello_world"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:scrollbars="vertical"
+        tools:context=".MainActivity">
+
+        <EditText
+            android:id="@+id/firstName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="First Name"
+            android:inputType="textPersonName"
+            android:minWidth="225dp" />
+
+        <EditText
+            android:id="@+id/lastName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Last Name"
+            android:inputType="textPersonName"
+
+            android:minWidth="225dp" />
+
+        <EditText
+            android:id="@+id/EID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="EID (numbers only)"
+            android:inputType="number"
+
+            android:minWidth="225dp" />
+
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="User Name"
+
+            android:minWidth="225dp" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:inputType="textPassword"
+
+            android:minWidth="225dp" />
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:minWidth="225dp" />
+
+        <EditText
+            android:id="@+id/handbookYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Handbook Year"
+            android:inputType="number"
+            android:minWidth="225dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select your Honors Programs:" />
+
+        <CheckBox
+            android:id="@+id/universityHonorsCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="University Honors" />
+
+        <CheckBox
+            android:id="@+id/departmentalHonorsCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Departmental Honors" />
+
+        <CheckBox
+            android:id="@+id/highestHonorsCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Highest Honors" />
+
+        <CheckBox
+            android:id="@+id/fullHonorsCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Full Honors" />
+
+
+        <EditText
+            android:id="@+id/expectedGraduation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Expected Graduation"
+            android:inputType="date"
+            android:minWidth="225dp" />
+
+        <EditText
+            android:id="@+id/major"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Major"
+            android:inputType="textAutoComplete"
+            android:minWidth="225dp" />
+
+        <EditText
+            android:id="@+id/minor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Minor"
+            android:inputType="textAutoComplete"
+            android:minWidth="225dp" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="225dp"
+            android:singleLine="true"
+            android:text="Submit"
+            android:onClick=""/>
+
+    </LinearLayout>
+
+</ScrollView>
