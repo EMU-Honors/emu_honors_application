@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="University Honors"
+        android:id="@+id/textView"
+        android:password="false"
+        android:gravity="center"
+        android:paddingBottom="25dp"
+        android:paddingTop="25dp"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Honors Credits"
+        android:id="@+id/checklist_honors_credits"
+        android:checked="false"
+        android:onClick="onCheck"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- General Education"
+        android:id="@+id/checkBox2"
+        android:checked="false"
+        android:paddingLeft="25dp"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- Interdisciplinary"
+        android:id="@+id/checkBox3"
+        android:checked="false"
+        android:paddingLeft="50dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- Major/Minor"
+        android:id="@+id/checkBox4"
+        android:checked="false"
+        android:paddingLeft="25dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Honors Experiences"
+        android:id="@+id/checkBox5"
+        android:checked="false" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- Cultural"
+        android:id="@+id/checkBox6"
+        android:checked="false"
+        android:paddingLeft="25dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- Leadership"
+        android:id="@+id/checkBox7"
+        android:checked="false"
+        android:paddingLeft="25dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Community Service"
+        android:id="@+id/checkBox8"
+        android:checked="false" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Star Lecture Series"
+        android:id="@+id/checkBox9"
+        android:checked="false" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- Attend Star Lectures"
+        android:id="@+id/checkBox10"
+        android:checked="false"
+        android:paddingLeft="25dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- Reflection Paper"
+        android:id="@+id/checkBox11"
+        android:checked="false"
+        android:paddingLeft="25dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Research Workshop"
+        android:id="@+id/checkBox12"
+        android:checked="false" />
+
+</LinearLayout>

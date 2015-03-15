@@ -20,6 +20,7 @@
             android:label="New User">
 
             </activity>
+        <activity android:name=".ChecklistActivity"></activity>
     </application>
 
 </manifest>

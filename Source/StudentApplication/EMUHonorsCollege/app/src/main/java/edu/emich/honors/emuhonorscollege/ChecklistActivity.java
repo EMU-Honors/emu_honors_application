@@ -7,20 +7,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Toast;
 
 
-public class LoginActivity extends ActionBarActivity {
+public class ChecklistActivity extends ActionBarActivity {
 
-    private Button newUserButton;
-    private Button submitButton;
-
+    private CheckBox honorsCreditsCheckbox;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.checklist);
 
-        newUserButton = (Button) findViewById(R.id.login_new_user);
-        submitButton = (Button) findViewById(R.id.login_submit);
+        honorsCreditsCheckbox = (CheckBox) findViewById(R.id.checklist_honors_credits);
     }
 
 
@@ -46,13 +45,12 @@ public class LoginActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void newUser(View view)
+    public void onCheck(View view)
     {
-        startActivity(new Intent(this, NewUserActivity.class));
-    }
-
-    public void onClick(View view)
-    {
-        startActivity(new Intent(this, ChecklistActivity.class));
+        CheckBox currentCheckBox = (CheckBox) view;
+        if (currentCheckBox.isChecked()) {
+            Toast.makeText(this, "Can't do that. Too bad.", Toast.LENGTH_SHORT).show();
+            currentCheckBox.setChecked(false);
+        }
     }
 }
