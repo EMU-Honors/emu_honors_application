@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:text="- General Education"
         android:id="@+id/checkBox2"
-        android:checked="true"
+        android:checked="false"
         android:paddingLeft="25dp"/>
 
     <CheckBox
