@@ -15,9 +15,9 @@ $thisPage="home";
   </head>
   <body>
     <div id="container">
-    <?php include 'header.html'?>
       <?php
         if ($_SESSION['logged_in'] == 'admin') {
+       	include 'header.html';
       ?>
       <div style="margin-top:15%;">
 	      <h1> Welcome! </h1>
@@ -26,6 +26,7 @@ $thisPage="home";
       <?php
         } else {
       ?>
+      <img alt="" src="header.png">
       <div id="login">
         <h2>Admin Login</h2>
         <form action="<?=$_SERVER['PHP_SELF']?>" method="post">
