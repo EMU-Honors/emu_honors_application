@@ -59,10 +59,8 @@ $thisPage="update";
       margin-bottom: 10px;
       border: 1px solid black;
       padding: 5px;
-    }
-    div#container {
       width: 60%;
-      margin: auto;
+      margin:auto;
     }
     label {
       padding: 20px;
