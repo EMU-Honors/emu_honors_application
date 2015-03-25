@@ -1,17 +1,26 @@
 package edu.emich.honors.emuhonorscollege;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
-public class MainActivity extends ActionBarActivity {
+public class LoginActivity extends ActionBarActivity {
+
+    private Button newUserButton;
+    private Button submitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.login);
+
+        newUserButton = (Button) findViewById(R.id.login_new_user);
+        submitButton = (Button) findViewById(R.id.login_submit);
     }
 
 
@@ -35,5 +44,15 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void newUser(View view)
+    {
+        startActivity(new Intent(this, NewUserActivity.class));
+    }
+
+    public void onClick(View view)
+    {
+        startActivity(new Intent(this, ChecklistActivity.class));
     }
 }
