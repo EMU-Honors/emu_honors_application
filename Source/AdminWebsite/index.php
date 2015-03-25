@@ -4,6 +4,8 @@ session_start();
 if ($_POST['username'] == 'Honors' && $_POST['password'] == 'password') {
   $_SESSION['logged_in'] = 'admin';
 }
+
+$thisPage="home";
 ?>
 <!doctype html>
 <html>
@@ -12,16 +14,14 @@ if ($_POST['username'] == 'Honors' && $_POST['password'] == 'password') {
     <link type="text/css" rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <div id="container" style="background-color: #E1E1E1;">
-    <img alt="" src="header.png">
+    <div id="container">
+    <?php include 'header.html'?>
       <?php
         if ($_SESSION['logged_in'] == 'admin') {
       ?>
-      <div>
-        <p><a href="create_reqs.php">Create Requirements</a></p>
-        <p><a href="update_reqs.php">Update Requirements</a></p>
-        <p><a href="update_reqs.php">View Statistics</a></p>
-        <p><a href="logout.php">Logout</a></p>
+      <div style="margin-top:15%;">
+	      <h1> Welcome! </h1>
+	      <p> Please choose an option from above. </p>
       </div>
       <?php
         } else {
@@ -37,6 +37,7 @@ if ($_POST['username'] == 'Honors' && $_POST['password'] == 'password') {
       <?php
         }
       ?>
+      <div id="footer"></div>
     </div>
   </body>
 </html>

@@ -4,6 +4,8 @@ session_start();
 if ($_POST['username'] == 'admin' && $_POST['password'] == 'admin') {
   $_SESSION['logged_in'] = 'admin';
 }
+
+$thisPage="stats";
 ?>
 <!doctype html>
 <html>
@@ -18,7 +20,7 @@ if ($_POST['username'] == 'admin' && $_POST['password'] == 'admin') {
   </head>
   <body>
     <div id="container">
-    <img alt="" src="header.png">
+    <?php include 'header.html'?>
       <h2>Display Statistics</h2>
       <center>
       <table border="1">
@@ -45,6 +47,7 @@ if ($_POST['username'] == 'admin' && $_POST['password'] == 'admin') {
         <tr><th>Num Students:</th><td>3054</td></tr>
       </table>
       </center>
+      <div id="footer"></div>
     </div>
   </body>
 </html>

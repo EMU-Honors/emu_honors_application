@@ -5,6 +5,7 @@ if ($_SESSION['logged_in'] != 'admin') {
   header('Location: ' . 'index.php');
   die();
 }
+$thisPage="create";
 ?>
 <!doctype html>
 <html>
@@ -69,7 +70,7 @@ if ($_SESSION['logged_in'] != 'admin') {
   </head>
   <body>
     <div id="container">
-      <img alt="" src="header.png">
+    <?php include 'header.html'?>
       <form action="" method="post">
         <p>Year: <input type="number" min="2007" value="2007" /></p>
         <div id="requirements"></div>
@@ -78,8 +79,8 @@ if ($_SESSION['logged_in'] != 'admin') {
           <button type="button" >Load Previous Year</button>
           <button>Submit new Requirement Catalogue</button>
         </p>
-        <p><a href="logout.php">Logout</a></p>
       </form>
+      <div id="footer"></div>
     </div>
   </body>
 </html>
