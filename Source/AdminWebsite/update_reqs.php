@@ -5,6 +5,8 @@ if ($_SESSION['logged_in'] != 'admin') {
   header('Location: ' . 'index.php');
   die();
 }
+
+$thisPage="update";
 ?>
 <!doctype html>
 <html>
@@ -57,10 +59,8 @@ if ($_SESSION['logged_in'] != 'admin') {
       margin-bottom: 10px;
       border: 1px solid black;
       padding: 5px;
-    }
-    div#container {
       width: 60%;
-      margin: auto;
+      margin:auto;
     }
     label {
       padding: 20px;
@@ -69,7 +69,7 @@ if ($_SESSION['logged_in'] != 'admin') {
   </head>
   <body>
     <div id="container">
-      <img alt="" src="header.png">
+    <?php include 'header.html'?>
       <form action="" method="post">
         <p>Year: <?="2007"?></p>
         <div id="requirements"></div>
@@ -77,8 +77,8 @@ if ($_SESSION['logged_in'] != 'admin') {
           <button type="button" onclick="addNewRequirement();">Add new requirement</button>
           <button>Update Requirement Catalogue</button>
         </p>
-        <p><a href="logout.php">Logout</a></p>
       </form>
+      <div id="footer"></div>
     </div>
   </body>
 </html>
