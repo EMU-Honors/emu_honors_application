@@ -1,11 +1,13 @@
 package edu.emich.honors.emuhonorscollege;
 
+import android.app.AlertDialog;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 public class NewUserActivity extends ActionBarActivity {
@@ -44,5 +46,16 @@ public class NewUserActivity extends ActionBarActivity {
     public void submitClick(View view) {
         Toast.makeText(this, "Thank you!", Toast.LENGTH_SHORT).show();
         finish();
+    }
+
+
+    public void displayFullHonorsDialog(View view) {
+        CheckBox fullHonorsCheckbox = (CheckBox) findViewById(R.id.fullHonorsCheckBox);
+        fullHonorsCheckbox.setChecked(false);
+
+        AlertDialog.Builder fullHonorsDialog = new AlertDialog.Builder(this);
+        fullHonorsDialog.setTitle("Full Honors Not Supported");
+        fullHonorsDialog.setMessage("Full Honors is not supported by the application at this time. Please contact your Honors Adviser for assistance.");
+        fullHonorsDialog.show();
     }
 }

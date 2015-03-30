@@ -108,6 +108,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Highest Honors" />
+
+        <CheckBox
+            android:id="@+id/fullHonorsCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Full Honors"
+            android:onClick="displayFullHonorsDialog"
+        />
         </LinearLayout>
 
         <EditText
