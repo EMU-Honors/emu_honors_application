@@ -1,4 +1,4 @@
-package edu.emich.honors.emuhonorscollege;
+package edu.emich.honors.emuhonorscollege.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
+
+import edu.emich.honors.emuhonorscollege.R;
 
 public class ChecklistActivity extends ActionBarActivity {
 

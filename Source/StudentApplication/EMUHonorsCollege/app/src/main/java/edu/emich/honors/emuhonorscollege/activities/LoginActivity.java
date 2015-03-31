@@ -1,4 +1,4 @@
-package edu.emich.honors.emuhonorscollege;
+package edu.emich.honors.emuhonorscollege.activities;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import edu.emich.honors.emuhonorscollege.R;
 
 
 public class LoginActivity extends ActionBarActivity {
@@ -46,12 +48,12 @@ public class LoginActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void newUser(View view)
+    public void goToNewUserPage(View view)
     {
         startActivity(new Intent(this, NewUserActivity.class));
     }
 
-    public void onClick(View view)
+    public void submitLoginCredentials(View view)
     {
         startActivity(new Intent(this, ChecklistActivity.class));
     }

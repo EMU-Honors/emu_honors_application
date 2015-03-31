@@ -1,24 +1,27 @@
-package edu.emich.honors.emuhonorscollege;
+package edu.emich.honors.emuhonorscollege.activities;
 
-import android.app.AlertDialog;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.Toast;
 
-public class NewUserActivity extends ActionBarActivity {
+import edu.emich.honors.emuhonorscollege.R;
 
+public class SettingsActivity extends ActionBarActivity {
+
+    private Button changePasswordButton;
     private Button submitButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.new_user);
+        setContentView(R.layout.login);
 
-        submitButton = (Button) findViewById(R.id.new_user_submit);
+        changePasswordButton = (Button) findViewById(R.id.change_password_button);
+        submitButton = (Button) findViewById(R.id.settings_submit_button);
     }
 
     @Override
@@ -43,19 +46,13 @@ public class NewUserActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void submitClick(View view) {
-        Toast.makeText(this, "Thank you!", Toast.LENGTH_SHORT).show();
-        finish();
+    public void onClickSubmit(View view)
+    {
+        startActivity(new Intent(this, ChecklistActivity.class));
     }
 
-
-    public void displayFullHonorsDialog(View view) {
-        CheckBox fullHonorsCheckbox = (CheckBox) findViewById(R.id.fullHonorsCheckBox);
-        fullHonorsCheckbox.setChecked(false);
-
-        AlertDialog.Builder fullHonorsDialog = new AlertDialog.Builder(this);
-        fullHonorsDialog.setTitle("Full Honors Not Supported");
-        fullHonorsDialog.setMessage("Full Honors is not supported by the application at this time. Please contact your Honors Adviser for assistance.");
-        fullHonorsDialog.show();
+    public void onClickPassword(View view)
+    {
+        startActivity(new Intent(this, LoginActivity.class));
     }
 }
