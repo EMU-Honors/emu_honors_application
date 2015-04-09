@@ -1,4 +1,15 @@
 admin
-create requirements
-update requirements
-input coaching
+create handbook
+-create requirements
+--requirement name
+--handbook year
+--handbook description
+-create steps_to_completion
+--year
+--requirement name
+--order
+--name
+--description
+view handbook
+view statistics
+
