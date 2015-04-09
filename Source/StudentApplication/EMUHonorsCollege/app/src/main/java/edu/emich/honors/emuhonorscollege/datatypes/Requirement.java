@@ -1,4 +1,4 @@
-package edu.emich.honors.emuhonorscollege;
+package edu.emich.honors.emuhonorscollege.datatypes;
 
 import java.util.ArrayList;
 

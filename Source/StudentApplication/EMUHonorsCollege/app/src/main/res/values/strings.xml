@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">EMU Honors College</string>
-
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="graduation_year_prompt">Graduation Year</string>
+    <string name="graduation_term_prompt">Graduation Term</string>
+    <string name="handbook_year_prompt">Select Handbook Year:</string>
+    <string name="select_major_prompt">Select Major:</string>
+    <string name="select_minor_prompt">Select Minor:</string>
+
 </resources>

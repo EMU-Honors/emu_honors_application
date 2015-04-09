@@ -1,27 +1,37 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/hello_world"
+        android:id="@+id/newUserParentLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:scrollbars="vertical"
-        tools:context=".MainActivity">
+        tools:context=".MainActivity"
+        android:focusable="true">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please enter your information:"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_gravity="center"
+            android:paddingBottom="25dp"
+            android:textStyle="bold"/>
         <EditText
             android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:layout_gravity="center"
+            
             android:minWidth="225dp" />
 
         <EditText
@@ -30,7 +40,7 @@
         android:layout_height="wrap_content"
         android:hint="Password"
         android:inputType="textPassword"
-        android:layout_gravity="center"
+        
         android:minWidth="225dp" />
 
         <EditText
@@ -39,7 +49,7 @@
         android:layout_height="wrap_content"
         android:hint="Confirm Password"
         android:inputType="textPassword"
-        android:layout_gravity="center"
+        
         android:minWidth="225dp" />
 
 
@@ -51,7 +61,7 @@
             android:hint="First Name"
             android:inputType="textPersonName"
             android:minWidth="225dp"
-            android:layout_gravity="center"/>
+            />
 
         <EditText
             android:id="@+id/lastName"
@@ -59,37 +69,51 @@
             android:layout_height="wrap_content"
             android:hint="Last Name"
             android:inputType="textPersonName"
-            android:layout_gravity="center"
+            
             android:minWidth="225dp" />
 
         <EditText
-            android:id="@+id/EID"
+            android:id="@+id/eIDEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="EID (numbers only)"
             android:inputType="number"
-            android:layout_gravity="center"
+            
             android:minWidth="225dp" />
 
-        <EditText
-            android:id="@+id/handbookYear"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Handbook Year"
-            android:layout_gravity="center"
-            android:inputType="number"
-            android:minWidth="225dp" />
+            android:text="Select Handbook Year:"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:id="@+id/selectHandbookYearTextView"
+            android:textStyle="bold"/>
+
+        <Spinner
+            android:id="@+id/handbookYearSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog"
+            android:prompt="@string/handbook_year_prompt"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_gravity="center">
+            >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select your Honors Type(s):" />
+            android:text="Select your Honors Type(s):"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textStyle="bold"/>
 
         <CheckBox
             android:id="@+id/universityHonorsCheckBox"
@@ -108,43 +132,89 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Highest Honors" />
+
+        <CheckBox
+            android:id="@+id/fullHonorsCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Full Honors"
+            android:onClick="displayFullHonorsDialog"
+        />
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/expectedGraduation"
+        <TextView
+            android:id="@+id/expectedGraduationTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Expected Graduation"
-            android:layout_gravity="center"
-            android:inputType="date"
-            android:minWidth="225dp" />
+            android:text="Expected Graduation"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textStyle="bold"/>
 
-
-        <EditText
-            android:id="@+id/major"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Major"
-            android:layout_gravity="center"
-            android:inputType="textAutoComplete"
-            android:minWidth="225dp" />
+            android:orientation="horizontal"
+            >
 
-        <EditText
-            android:id="@+id/minor"
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/expectedGraduationTermSpinner"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/expectedGraduationYearSpinner"/>
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/majorTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:hint="Minor"
-            android:inputType="textAutoComplete"
-            android:minWidth="225dp" />
+            android:text="Major"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:textStyle="bold"
+            />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog"
+            android:id="@+id/majorSpinner"
+            android:prompt="@string/select_major_prompt"/>
+
+        <TextView
+            android:id="@+id/minorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Minor"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:textStyle="bold"/>
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog"
+            android:id="@+id/minorSpinner"
+            android:prompt="@string/select_minor_prompt"/>
+
 
         <Button
             android:id="@+id/new_user_submit"
             android:layout_width="wrap_content"
-            android:layout_gravity="center"
+            
             android:layout_height="wrap_content"
             android:text="Submit"
-            android:onClick="submitClick"/>
+            android:onClick="submitNewUser"/>
 
     </LinearLayout>
 

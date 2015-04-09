@@ -1,4 +1,4 @@
-package edu.emich.honors.emuhonorscollege;
+package edu.emich.honors.emuhonorscollege.activities;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -7,9 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.RadioButton;
-import android.widget.Toast;
+
+import edu.emich.honors.emuhonorscollege.R;
 
 public class SettingsActivity extends ActionBarActivity {
 
