@@ -18,6 +18,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -46,8 +48,9 @@ public class Connect extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getBaseContext(),"hi",Toast.LENGTH_LONG).show();
-                theOutput.append(" clicked");
-                Toast.makeText(getBaseContext(), doASomething(), Toast.LENGTH_LONG).show();
+                //theOutput.append(" clicked");
+                //Toast.makeText(getBaseContext(), doASomething(), Toast.LENGTH_LONG).show();
+                theOutput.setText(doASomething());
             }
         });
     }
@@ -55,12 +58,15 @@ public class Connect extends ActionBarActivity {
     private String doASomething() {
         String result = "";
         HttpClient client = new DefaultHttpClient();
-        HttpPost post = new HttpPost("http://db2.emich.edu/~egurnee/android_test.php");
-        
+        HttpPost post = new HttpPost("http://db2.emich.edu/~201501_cosc481_group01/android_test.php");
+
+        JSONObject object = new JSONObject();
         try {
+            object.put("handbook_year",2007);
+            object.put("honors_type","departmental");
             List dict = new ArrayList();
 
-            dict.add(new BasicNameValuePair("test", "some data"));
+            dict.add(new BasicNameValuePair("get_handbook", object.toString()));
             post.setEntity(new UrlEncodedFormEntity(dict));
 
             HttpResponse response = client.execute(post);
@@ -72,11 +78,12 @@ public class Connect extends ActionBarActivity {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-
-
         return result;
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
