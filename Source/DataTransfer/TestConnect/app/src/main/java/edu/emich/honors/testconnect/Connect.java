@@ -1,4 +1,5 @@
 package edu.emich.honors.testconnect;
+//SQLite branch
 
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
