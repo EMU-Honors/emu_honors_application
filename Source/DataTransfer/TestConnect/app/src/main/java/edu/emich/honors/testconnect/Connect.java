@@ -1,6 +1,7 @@
 package edu.emich.honors.testconnect;
 
 
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ public class Connect extends ActionBarActivity {
 
     Button theButton;
     TextView theOutput;
+    private SQLiteHelper localDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +53,15 @@ public class Connect extends ActionBarActivity {
                 //Toast.makeText(getBaseContext(),"hi",Toast.LENGTH_LONG).show();
                 //theOutput.append(" clicked");
                 //Toast.makeText(getBaseContext(), doASomething(), Toast.LENGTH_LONG).show();
-                theOutput.setText(doASomething());
+                String result = doASomething();
+                result = "{ requirements:" + result + "}";  //JSONarray -> JSONobject
+                String afterParse = parseJSON(result);
+                theOutput.setText(afterParse);  //display results after parsing JSON
             }
+
         });
+
+
     }
 
     private String doASomething() {
@@ -84,6 +92,62 @@ public class Connect extends ActionBarActivity {
         }
         return result;
     }
+
+
+    private String parseJSON(String result) {
+
+        JSONObject jsonResponse;
+        String outputData = "";
+
+        try {
+
+            /****** Creates a new JSONObject with name/value mappings from the JSON string. ********/
+            jsonResponse = new JSONObject(result);
+
+            /***** Returns the value mapped by name if it exists and is a JSONArray. ***/
+            /*******  Returns null otherwise.  *******/
+            JSONArray yearAndType = jsonResponse.optJSONArray("requirements");
+
+            /*********** Process each JSON Node ************/
+
+            int lengthJsonArr = yearAndType.length();
+
+
+            for(int i=0; i < lengthJsonArr; i++)
+            {
+                /****** Get Object for each JSON node.***********/
+                JSONObject jsonChildNode = yearAndType.getJSONObject(i);
+
+                /******* Fetch node values **********/
+                int dispNumber = Integer.parseInt(jsonChildNode.optString("display_number").toString());
+                String name = jsonChildNode.optString("requirement_name").toString();
+                String component = jsonChildNode.optString("name").toString();
+                int totalNeeded = Integer.parseInt(jsonChildNode.optString("total").toString());
+                String description = jsonChildNode.optString("description").toString();
+
+                localDB = new SQLiteHelper(this);
+                localDB.insertRequirement("2007", "deparmental", dispNumber, name, component, totalNeeded, description);
+
+            /*  ouptputData is only the strings that I parsed from JSON
+              * I only did this to make sure I parsed the JSON correclty
+               * The output you see on the screen is NOT from the database */
+                outputData += "REQMT: \n" +dispNumber+ "\n"
+                                +name+ "\n"
+                                +component+ "\n"
+                                +totalNeeded+ "\n"
+                                +description+ "\n********************************** \n" ;
+            }
+
+
+        } catch (JSONException e) {
+
+            e.printStackTrace();
+        }
+
+        return outputData;  //print dat shit
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

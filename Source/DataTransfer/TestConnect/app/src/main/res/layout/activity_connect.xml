@@ -19,4 +19,13 @@
         android:layout_below="@+id/outputTextView"
         android:layout_alignParentStart="true" />
 
+    Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Table"
+        android:id="@+id/createTableButton"
+        android:layout_below="@+id/theTestButton"
+        android:layout_toEndOf="@+id/outputTextView"
+        android:layout_marginTop="98dp" />
+
 </RelativeLayout>
