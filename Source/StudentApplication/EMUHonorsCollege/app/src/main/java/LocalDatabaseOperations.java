@@ -7,64 +7,71 @@ import android.util.Log;
 /**
  * Created by Jordan on 4/6/2015.
  *
- * Currently leaving out sub requirements for trial. I am not sure if we should create one table
- * for main requirements and one table for sub requirements or attempt to place them together??
- *
- * NOTE: I HAVE NOT TOUCHED THE ANDROID MANIFEST -> LOCALTABLEINFO AND THIS CLASS ARE NOT IN
+ * UPDATE:  April 15
+ * Current Local DB from what we are pulling from remote DB
  */
 public class LocalDatabaseOperations extends SQLiteOpenHelper{
 
-    public static final int DATABASE_VERSION = 1;
-    public String CREATE_QUERY = "CREATE TABLE "+ LocalTableInfo.TableInfo.TABLE_NAME+"("+
-            LocalTableInfo.TableInfo.REQ_NAME+" TEXT,"+
-            LocalTableInfo.TableInfo.DESCRIPTION+" TEXT,"+
-            LocalTableInfo.TableInfo.COMPLETED+" INTEGER,"+   //bool  ->  0 or 1
-            LocalTableInfo.TableInfo.NUMBER_OF_COMPLETED +" INTEGER,"+
-            LocalTableInfo.TableInfo.NUMBER_REQUIRED_FOR_COMPLETION+" INTEGER );" ;
-
-
+    //table info
+    public static final String LOCAL_DB_NAME = "local_db";
+    public static final String TABLE_NAME = "requirements";
+    public static final int VERSION = 1;
+    //attribute names
+    public static final String HANDBOOK_YEAR = "year";
+    public static final String HONORS_TYPE = "type";
+    public static final String DISPLAY_NUMBER = "dispNumber";
+    public static final String REQUIREMENT_NAME = "name";
+    public static final String COMPONENT_NAME = "component";
+    public static final String TOTAL = "totalNeeded";
+    public static final String DESCRIPTION = "description";
+    public static final String TOTAL_COMPLETED = "completed";
+    //create statement
+    public String CREATE_QUERY = "CREATE TABLE "+
+            TABLE_NAME+"(" +
+            HANDBOOK_YEAR +" TEXT," +
+            HONORS_TYPE +" TEXT," +
+            DISPLAY_NUMBER +" INTEGER," +
+            REQUIREMENT_NAME +" TEXT," +
+            COMPONENT_NAME +" TEXT," +
+            TOTAL +" INTEGER," +
+            DESCRIPTION +" TEXT," +
+            TOTAL_COMPLETED +" TEXT, " +
+            "PRIMARY KEY(year, type, dispNumber, name));" ;
 
     public LocalDatabaseOperations(Context context) {
-
-      // factory (second parameter) = null
-        super(context, LocalTableInfo.TableInfo.DATABASE_NAME, null, DATABASE_VERSION);
-        Log.d("Database operations", "Database created");
+// Database: local_db, Version: 1
+        super(context, LOCAL_DB_NAME, null, VERSION);
     }
-
-
-
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         db.execSQL(CREATE_QUERY);
-        Log.d("Database operations", "Table created");
-
+        Log.d("create", "DB CREATED");
     }
-
-
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS " +TABLE_NAME);
+        onCreate(db);
+        Log.d("upgrade", "UPGRADED TABLE");
+    }
+    // insert a requirement -> must parse JSON and change dispNumber & totalNeeded to int
+// completed is set at 0 (false)
+    public boolean insertRequirement (String year, String type, int dispNumber, String name,
+                                      String component, int totalNeeded, String description)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("year", year);
+        contentValues.put("type", type);
+        contentValues.put("dispNumber", dispNumber);
+        contentValues.put("name", name);
+        contentValues.put("component", component);
+        contentValues.put("totalNeeded", totalNeeded);
+        contentValues.put("description", description);
+        contentValues.put("completed", 0);
+        db.insert(TABLE_NAME, null, contentValues);
+        return true;
     }
 
-  //this will be called when importing data from REMOTE DB
-  //may be able to hard code some data into the table for testing until we get more from Eddie
-    public void insertIntoTable(LocalDatabaseOperations dop, String name, String desc,
-                                       int complete, int numComplete, int numRequired)  {
-
-        SQLiteDatabase SQ = dop.getWritableDatabase();
-        ContentValues vals = new ContentValues();
-        vals.put(LocalTableInfo.TableInfo.REQ_NAME, name);
-        vals.put(LocalTableInfo.TableInfo.DESCRIPTION, desc);
-        vals.put(String.valueOf(LocalTableInfo.TableInfo.COMPLETED), complete);
-        vals.put(String.valueOf(LocalTableInfo.TableInfo.NUMBER_OF_COMPLETED), numComplete);
-        vals.put(String.valueOf(LocalTableInfo.TableInfo.NUMBER_REQUIRED_FOR_COMPLETION), numRequired);
-
-     //may want to remove long k if does not work
-        long k = SQ.insert(LocalTableInfo.TableInfo.TABLE_NAME, null, vals);
-        Log.d("Database operations", "One row inserted");
-    }
 
 
 
