@@ -14,20 +14,79 @@ $thisPage="create";
     function $(id) {
     	  return document.getElementById(id);
     }
-    function doAdd() {
-    	  $('req-holder').innerHTML = '<table style="padding:5px;"> \
-	    	<tr><td><button>Remove</button></td><td>Requirement Name:</td><td><input type="text"></td></tr> \
-	    	<tr><td><button>Remove</button></td><td>Component:</td><td><input type="text"></td> \
-	    		<td>Quantity</td><td><input type="number"></td><td>Display Order</td><td><input type="number"></td></tr> \
-	    	<tr><td></td><td>Description:</td><td colspan="5"><input type="text" style="width:500px"></td></tr> \
-	    	<tr><td><button>Add Component</button></td></tr> \
-	    </table>'
-    	+  $('req-holder').innerHTML;
-    }
-    function addComponent() {
+    var numberOfRequirements = 0;
 
+    function addReq() {
+        if (!$('req-start')) {
+			$('reqs').innerHTML = 
+				'<div class="req-holder" id="req-start"> \
+		    		<div class="row"><button onclick="this.parentNode.parentNode.remove()">Remove</button><label>Requirement Name:</label><input type="text" class="long-field"></div> \
+    				<button onclick="addComp(this.parentNode);">Add Component</button> \
+    			</div>';
+        } else {
+			var reqId = 'req' + numberOfRequirements;
+	
+			var newReq = $('req-start').cloneNode();
+			newReq.id = reqId;
+			newReq.innerHTML = 
+				'<div class="row"><button onclick="this.parentNode.parentNode.remove()">Remove</button><label>Requirement Name:</label><input type="text" class="long-field"></div> \
+				<button onclick="addComp(this.parentNode);">Add Component</button>';
+	
+			$('reqs').insertBefore(newReq, $('reqs').childNodes[0]);
+	
+			numberOfRequirements++;
+        }
+    }
+
+    var numberOfComps = 0;
+
+    function addComp(parent) {
+		var newComp = document.createElement('div');
+		
+		newComp.id = 'comp' + numberOfComps;
+		newComp.innerHTML = 
+			'<div class="comp-holder"> \
+			<div class="row"><button onclick="this.parentNode.parentNode.remove()">Remove</button><label>Component: </label><input type="text" class="long-field"></div> \
+		    <div class="row"><label class="inner-comp">Quantity:</label><input type="number"> \
+		    	<label>Display Order:</label><input type="number"></div> \
+		    <div class="row"><label class="inner-comp">Description:</label><input type="text" class="long-field"></div> \
+		    </div>';
+
+	    parent.insertBefore(newComp, parent.lastChild.previousSibling);
     }
     </script>
+    <style>
+    	.reqs {
+    		overflow-y:scroll;
+    		height:100%;
+    	}
+    	.req-holder{
+    		margin:auto;
+    		padding:10px;
+    		text-align:left;
+    	}
+    	.comp-holder {
+    		padding-left:5%;
+    	}
+    	.row {
+    		clear:both;
+    		width:100%;
+    		padding-bottom:1%;
+    	}
+    	button, label {
+    		margin-right:1%;
+    	}
+    	label {
+    		margin-left:1%;
+    		text-align:right;
+    	}
+    	.inner-comp {
+    		margin-left: 9%;
+    	}
+    	.long-field {
+    		width:500px;
+    	}
+    </style>
    </head>
   <body>
     <div id="container">
@@ -39,16 +98,13 @@ $thisPage="create";
     				<option value="departmental">Departmental</option>
     				<option value="highest">Highest</option>
     			</select></h3>
-    	<button onclick="doAdd();">Add Requirement</button>
+    	<button onclick="addReq();">Add Requirement</button>
     	<hr />
-    	<div style="margin:auto; padding:10px; text-align:left; overflow-y:scroll; height:100%;" id="req-holder">
-    	 <table>
-	    	<tr><td><button>Remove</button></td><td>Requirement Name:</td><td><input type="text"></td></tr>
-	    	<tr><td><button>Remove</button></td><td>Component:</td><td><input type="text"></td>
-	    		<td>Quantity</td><td><input type="number"></td><td>Display Order</td><td><input type="number"></td></tr>
-	    	<tr><td></td><td>Description:</td><td colspan="5"><input type="text" style="width:500px"></td></tr>
-	    	<tr><td><button onclick="doAdd();">Add Component</button></td></tr>
-	    </table>
+    	<div id="reqs">
+    	<div class="req-holder" id="req-start">
+    		<div class="row"><button onclick="this.parentNode.parentNode.remove()">Remove</button><label>Requirement Name:</label><input type="text" class="long-field"></div>
+    		<button onclick="addComp(this.parentNode);">Add Component</button>
+    	</div>
     	</div>
 	<div id="footer"></div>
     </div>
