@@ -20,8 +20,9 @@ $thisPage="create";
         if (!$('req-start')) {
 			$('reqs').innerHTML = 
 				'<div class="req-holder" id="req-start"> \
-		    		<div class="row"><button onclick="this.parentNode.parentNode.remove()">Remove</button><label>Requirement Name:</label><input type="text" class="long-field"></div> \
-    				<button onclick="addComp(this.parentNode);">Add Component</button> \
+		    		<div class="row"><button type="button" onclick="this.parentNode.parentNode.remove()">Remove</button> \
+		    		<label>Requirement Name:</label><input type="text" class="long-field" name="reqName' + numberOfRequirements + '"></div> \
+    				<button type="button" onclick="addComp(this.parentNode);">Add Component</button> \
     			</div>';
         } else {
 			var reqId = 'req' + numberOfRequirements;
@@ -29,7 +30,8 @@ $thisPage="create";
 			var newReq = $('req-start').cloneNode();
 			newReq.id = reqId;
 			newReq.innerHTML = 
-				'<div class="row"><button onclick="this.parentNode.parentNode.remove()">Remove</button><label>Requirement Name:</label><input type="text" class="long-field"></div> \
+				'<div class="row"><button onclick="this.parentNode.parentNode.remove()">Remove</button> \
+				<label>Requirement Name:</label><input type="text" class="long-field" name="reqName' + numberOfRequirements + '"></div> \
 				<button onclick="addComp(this.parentNode);">Add Component</button>';
 	
 			$('reqs').insertBefore(newReq, $('reqs').childNodes[0]);
@@ -46,13 +48,17 @@ $thisPage="create";
 		newComp.id = 'comp' + numberOfComps;
 		newComp.innerHTML = 
 			'<div class="comp-holder"> \
-			<div class="row"><button onclick="this.parentNode.parentNode.remove()">Remove</button><label>Component: </label><input type="text" class="long-field"></div> \
-		    <div class="row"><label class="inner-comp">Quantity:</label><input type="number"> \
-		    	<label>Display Order:</label><input type="number"></div> \
-		    <div class="row"><label class="inner-comp">Description:</label><input type="text" class="long-field"></div> \
+			<div class="row"><button type="button" onclick="this.parentNode.parentNode.remove()">Remove</button> \
+			<label>Component: </label><input type="text" class="long-field" name="' + parent.id + '#compName#' + numberOfComps + '"></div> \
+		    <div class="row"><label class="inner-comp">Quantity:</label><input type="number" name="' + parent.id + '#compQuant' + numberOfComps + '"> \
+		    	<label>Display Order:</label><input type="number" name="' + parent.id + '#compOrder' + numberOfComps + '"></div> \
+		    <div class="row"><label class="inner-comp">Description:</label> \
+		    <input type="text" class="long-field" name="' + parent.id + '#compDesc' + numberOfComps + '"></div> \
 		    </div>';
 
 	    parent.insertBefore(newComp, parent.lastChild.previousSibling);
+
+	    numberOfComps++;
     }
     </script>
     <style>
@@ -91,6 +97,7 @@ $thisPage="create";
   <body>
     <div id="container">
     <?php include 'header.html'?>
+    	<form action="" method="post">
     	<h3>Year:&nbsp;<input type="text">&nbsp;
     	Type of Honors:&nbsp;
     			<select name="type">
@@ -98,14 +105,16 @@ $thisPage="create";
     				<option value="departmental">Departmental</option>
     				<option value="highest">Highest</option>
     			</select></h3>
-    	<button onclick="addReq();">Add Requirement</button>
+    	<button type="button" onclick="addReq();">Add Requirement</button>
+    	<button>Create</button>
     	<hr />
     	<div id="reqs">
     	<div class="req-holder" id="req-start">
-    		<div class="row"><button onclick="this.parentNode.parentNode.remove()">Remove</button><label>Requirement Name:</label><input type="text" class="long-field"></div>
-    		<button onclick="addComp(this.parentNode);">Add Component</button>
+    		<div class="row"><button type="button" onclick="this.parentNode.parentNode.remove()">Remove</button><label>Requirement Name:</label><input type="text" class="long-field"></div>
+    		<button type="button" onclick="addComp(this.parentNode);">Add Component</button>
     	</div>
     	</div>
+    	</form>
 	<div id="footer"></div>
     </div>
   </body>
