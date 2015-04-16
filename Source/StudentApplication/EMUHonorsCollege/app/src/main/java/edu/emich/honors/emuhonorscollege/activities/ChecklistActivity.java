@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 import edu.emich.honors.emuhonorscollege.R;
 import edu.emich.honors.emuhonorscollege.datatypes.Requirement;
+import edu.emich.honors.emuhonorscollege.datatypes.RequirementsList;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HandbookYear;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
@@ -60,7 +61,7 @@ public class ChecklistActivity extends ActionBarActivity {
         LinearLayout parentLayout = (LinearLayout) findViewById(R.id.checklist_linear_layout);
 
 //        Placeholder for a real list of requirements pulled from the DB
-        ArrayList<Requirement> listOfRequirements = new ArrayList<>();
+        ArrayList<Requirement> tempListOfRequirements = new ArrayList<>();
         for (int i = 0; i < 8; i++)
         {
             Requirement tempRequirement = new Requirement("Requirement " + i, "Description goes here!", 3 );
@@ -72,10 +73,19 @@ public class ChecklistActivity extends ActionBarActivity {
             {
                 tempRequirement.addSubRequirement(new Requirement());
             }
-            listOfRequirements.add(tempRequirement);
+            tempListOfRequirements.add(tempRequirement);
         }
 
-        buildCheckList(listOfRequirements, parentLayout);
+        RequirementsList requirementsList = new RequirementsList(HandbookYear.YEAR_2014, HonorsType.UNIVERSITY, tempListOfRequirements);
+
+        TextView honorsTypeTitle = new TextView(this);
+        honorsTypeTitle.setText(requirementsList.getHonorsType().toString());
+        honorsTypeTitle.setTextSize(40);
+        honorsTypeTitle.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        parentLayout.addView(honorsTypeTitle);
+
+        buildCheckList(tempListOfRequirements, parentLayout);
 
 
     }
