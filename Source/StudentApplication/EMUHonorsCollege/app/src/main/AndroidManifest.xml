@@ -22,6 +22,7 @@
             </activity>
         <activity android:name=".activities.ChecklistActivity"></activity>
         <activity android:name=".activities.SettingsActivity"></activity>
+        <activity android:name=".activities.InProgressActivity"></activity>
     </application>
 
 </manifest>

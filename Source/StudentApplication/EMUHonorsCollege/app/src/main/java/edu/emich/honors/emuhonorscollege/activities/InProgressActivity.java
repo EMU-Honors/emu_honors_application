@@ -1,26 +1,37 @@
 package edu.emich.honors.emuhonorscollege.activities;
 
+/**
+ * Created by Travis on 4/14/2015.
+ */
+
+
+
 import android.app.ActionBar;
-import android.content.Intent;
+import android.view.Gravity;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.LinearLayout;
+
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.EditText;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -29,23 +40,29 @@ import java.util.LinkedList;
 import edu.emich.honors.emuhonorscollege.R;
 import edu.emich.honors.emuhonorscollege.datatypes.Requirement;
 import edu.emich.honors.emuhonorscollege.datatypes.RequirementsList;
+import edu.emich.honors.emuhonorscollege.datatypes.User;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HandbookYear;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
-public class ChecklistActivity extends ActionBarActivity {
+
+public class InProgressActivity extends ActionBarActivity {
 
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
+    private LinearLayout mLinearLayout;
     private ArrayAdapter<String> mAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
+    private ArrayList<Requirement> mRequirements;
+   // private User user = new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.checklist);
+        setContentView(R.layout.in_progress);
 
-//        Menu Setup
+
+        //Menu Setup
         mDrawerList = (ListView)findViewById(R.id.navList);
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
@@ -56,11 +73,10 @@ public class ChecklistActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-
-//        Checklist Setup
+        //Checklist Setup
         LinearLayout parentLayout = (LinearLayout) findViewById(R.id.checklist_linear_layout);
 
-//        Placeholder for a real list of requirements pulled from the DB
+        //        Placeholder for a real list of requirements pulled from the DB
         ArrayList<Requirement> tempListOfRequirements = new ArrayList<>();
         for (int i = 0; i < 8; i++)
         {
@@ -77,18 +93,13 @@ public class ChecklistActivity extends ActionBarActivity {
             else
             {
                 tempRequirement.addSubRequirement(new Requirement());
+                tempRequirement.setInProgress(true);
             }
             tempListOfRequirements.add(tempRequirement);
         }
-
         RequirementsList requirementsList = new RequirementsList(HandbookYear.YEAR_2014, HonorsType.UNIVERSITY, tempListOfRequirements);
 
-        TextView honorsTypeTitle = new TextView(this);
-        honorsTypeTitle.setText(requirementsList.getHonorsType().toString());
-        honorsTypeTitle.setTextSize(40);
-        honorsTypeTitle.setGravity(Gravity.CENTER_HORIZONTAL);
 
-        parentLayout.addView(honorsTypeTitle);
 
         buildCheckList(tempListOfRequirements, parentLayout);
     }
@@ -108,69 +119,80 @@ public class ChecklistActivity extends ActionBarActivity {
                     onCheck((CheckBox) v, requirement);
                 }
             });
-            requirementCheckbox.setChecked(requirement.isCompleted());
-            requirementCheckbox.setLayoutParams(new ActionBar.LayoutParams(75, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER));
-            requirementCheckbox.setHeight(ActionBar.LayoutParams.MATCH_PARENT);
-            requirementRow.addView(requirementCheckbox);
 
+            if(!requirement.isInProgress()){
+                continue;
+            }else {
 
-            final ImageView dropDownArrow = new ImageView(this);
-            dropDownArrow.setImageResource(R.drawable.arrow_dropdown);
-            dropDownArrow.setLayoutParams(new ActionBar.LayoutParams(125, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER));
-            dropDownArrow.setPadding(25, 0, 25, 0);
-            dropDownArrow.setRotation(-90);
-            dropDownArrow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (dropDownArrow.getRotation() == -90)
-                    {
-                        dropDownArrow.setRotation(0);
+                requirementCheckbox.setLayoutParams(new ActionBar.LayoutParams(75, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER));
+                requirementCheckbox.setHeight(ActionBar.LayoutParams.MATCH_PARENT);
+                requirementRow.addView(requirementCheckbox);
+
+                final ImageView dropDownArrow = new ImageView(this);
+                dropDownArrow.setImageResource(R.drawable.arrow_dropdown);
+                dropDownArrow.setLayoutParams(new ActionBar.LayoutParams(125, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER));
+                dropDownArrow.setPadding(25, 0, 25, 0);
+                dropDownArrow.setRotation(-90);
+                dropDownArrow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (dropDownArrow.getRotation() == -90)
+                        {
+                            dropDownArrow.setRotation(0);
+                        }
+                        else
+                        {
+                            dropDownArrow.setRotation(-90);
+                        }
+                        Toast.makeText(getApplicationContext(), "Drop down!", Toast.LENGTH_SHORT).show();
                     }
-                    else
-                    {
-                        dropDownArrow.setRotation(-90);
+                });
+
+                if (requirement.hasSubRequirement())
+                {
+                    dropDownArrow.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    dropDownArrow.setVisibility(View.INVISIBLE);
+                }
+                requirementRow.addView(dropDownArrow);
+
+                TextView requirementTitle = new TextView(this);
+                requirementTitle.setText(requirement.getName());
+                requirementTitle.setTextSize(34);
+
+                final AlertDialog.Builder descriptionDialogBuilder = new AlertDialog.Builder(this);
+                descriptionDialogBuilder.setTitle(requirement.getName());
+                descriptionDialogBuilder.setMessage(requirement.getDescription());
+
+                descriptionDialogBuilder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
                     }
-                    Toast.makeText(getApplicationContext(), "Drop down!", Toast.LENGTH_SHORT).show();
-                }
-            });
+                });
 
-            if (requirement.hasSubRequirement())
-            {
-                dropDownArrow.setVisibility(View.VISIBLE);
+                requirementTitle.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        descriptionDialogBuilder.show();
+                        return false;
+                    }
+                });
+
+                requirementRow.addView(requirementTitle);
+
+                parentLayout.addView(requirementRow);
             }
-            else
-            {
-                dropDownArrow.setVisibility(View.INVISIBLE);
-            }
-            requirementRow.addView(dropDownArrow);
-
-            TextView requirementTitle = new TextView(this);
-            requirementTitle.setText(requirement.getName());
-            requirementTitle.setTextSize(34);
-
-            final AlertDialog.Builder descriptionDialogBuilder = new AlertDialog.Builder(this);
-            descriptionDialogBuilder.setTitle(requirement.getName());
-            descriptionDialogBuilder.setMessage(requirement.getDescription());
-
-            descriptionDialogBuilder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-
-            requirementTitle.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    descriptionDialogBuilder.show();
-                    return false;
-                }
-            });
-
-            requirementRow.addView(requirementTitle);
-
-            parentLayout.addView(requirementRow);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
     @Override
@@ -192,6 +214,7 @@ public class ChecklistActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
     public void onCheck(final CheckBox checkbox, final Requirement requirement)
     {
@@ -303,21 +326,25 @@ public class ChecklistActivity extends ActionBarActivity {
     }
 
     private void addDrawerItems() {
-        String[] osArray = { "Settings", "In Progress Requirements" };
+        String[] osArray = { "Settings", "Back to Login", "In Progress" };
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
+        @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
+                switch(position) {
                     case 0:
-                        Intent a = new Intent(ChecklistActivity.this, SettingsActivity.class);
+                        Intent a = new Intent(InProgressActivity.this, SettingsActivity.class);
                         startActivity(a);
                         break;
                     case 1:
-                        Intent b = new Intent(ChecklistActivity.this, InProgressActivity.class);
+                        Intent b = new Intent(InProgressActivity.this, LoginActivity.class);
                         startActivity(b);
+                        break;
+                    case 2:
+                        Intent c = new Intent(InProgressActivity.this, InProgressActivity.class);
+                        startActivity(c);
                         break;
                     default:
                 }
