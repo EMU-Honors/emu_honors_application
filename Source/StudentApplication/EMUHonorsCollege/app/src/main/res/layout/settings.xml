@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Settings"
+        android:id="@+id/textView"
+        android:password="false"
+        android:gravity="center"
+        android:paddingBottom="25dp"
+        android:paddingTop="25dp"/>
+
+    <Button
+        android:layout_width="149dp"
+        android:layout_height="wrap_content"
+        android:text="Change Password"
+        android:id="@+id/change_password_button" />
+
+    <TextView
+        android:layout_width="200sp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Select type of Honors"
+        android:id="@+id/textView2"
+        android:layout_weight="0.06"
+        android:paddingTop="10dp"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Departmental Honors"
+        android:id="@+id/checklist_honors_type1"
+        android:checked="false"
+        android:onClick="onCheck"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="University Honors"
+        android:id="@+id/checklist_honors_type2"
+        android:checked="false"
+        android:onClick="onCheck"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Highest Honors"
+        android:id="@+id/checklist_honors_type3"
+        android:checked="false"
+        android:onClick="onCheck"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Change Handbook Year"
+        android:id="@+id/textView3"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"/>
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2010-11 Handbook"
+        android:id="@+id/handbook_radio_button1" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2011-12 Handbook"
+        android:id="@+id/handbook_radio_button2" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2012-13 Handbook"
+        android:id="@+id/handbook_radio_button3" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2013-14 Handbook"
+        android:id="@+id/handbook_radio_button4" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2014-15 Handbook"
+        android:id="@+id/handbook_radio_button5" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit changes"
+        android:id="@+id/settings_submit_button"
+        android:layout_gravity="center_horizontal" />
+
+
+</LinearLayout>

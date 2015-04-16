@@ -1,4 +1,4 @@
-package edu.emich.honors.emuhonorscollege;
+package edu.emich.honors.testconnect;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
