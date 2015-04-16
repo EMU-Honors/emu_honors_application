@@ -50,7 +50,17 @@ public class SettingsActivity extends ActionBarActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
 
-    private User currentUser;
+    //dummy data variables
+    ArrayList<HonorsType> hTypeTest = new ArrayList<>();
+    ArrayList<AcademicProgram> aMajorTest = new ArrayList<>();
+    ArrayList<AcademicProgram> aMinorTest = new ArrayList<>();
+
+    GraduationDate gradTest = new GraduationDate(GraduationTerm.FALL, "2015");
+    FieldOfStudy fOfStudyTest = new FieldOfStudy(aMajorTest, aMinorTest);
+
+    char pasTest[];
+    private User currentUser = new User("ttaylo@emich",pasTest , "travis", "taylor", hTypeTest, "009234", fOfStudyTest, gradTest);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,21 +80,22 @@ public class SettingsActivity extends ActionBarActivity {
         submitButton = (Button) findViewById(R.id.new_settings_submit);
 
         //dummy data
-        ArrayList<HonorsType> hTypeTest = null;
 
-        ArrayList<AcademicProgram> aMajorTest = null;
-        ArrayList<AcademicProgram> aMinorTest = null;
-        aMajorTest.add(AcademicProgram.COMPUTER_SCIENCE);
-        aMinorTest.add(AcademicProgram.MATH);
-        GraduationDate gradTest = new GraduationDate(GraduationTerm.FALL, "2015");
-        FieldOfStudy fOfStudyTest = new FieldOfStudy(aMajorTest, aMinorTest);
         hTypeTest.add(HonorsType.DEPARTMENTAL);
         hTypeTest.add(HonorsType.HIGHEST);
-        char pasTest[];
+        aMajorTest.add(AcademicProgram.COMPUTER_SCIENCE);
+        aMinorTest.add(AcademicProgram.MATH);
+        fOfStudyTest.setMajors(aMajorTest);
+        fOfStudyTest.setMinors(aMinorTest);
         String test = "password";
         pasTest = test.toCharArray();
 
-        User currentUser = new User("ttaylo@emich",pasTest , "travis", "taylor", hTypeTest, "009234", fOfStudyTest, gradTest);
+        currentUser.setFieldOfStudy(fOfStudyTest);
+        currentUser.setPassword(pasTest);
+        currentUser.setHonorsTypes(hTypeTest);
+        currentUser.setGraduationDate(gradTest);
+
+
 
         //setting checkboxes
         ArrayList<HonorsType> honorsCheck = currentUser.getHonorsTypes();
@@ -119,24 +130,17 @@ public class SettingsActivity extends ActionBarActivity {
 
     public void submitSettings(View view) {
         boolean same = false;
-        char[] oldPassword = oldPasswordEditText.getText().toString().toCharArray();
+        String oldPassword = oldPasswordEditText.getText().toString();
         char[] newPassword = newPasswordEditText.getText().toString().toCharArray();
-        char[] confirmPass = currentUser.getPassword();
+        String confirmPass = currentUser.getPassword().toString();
 
-        for(int i = 0; i<confirmPass.length; i++){
-            if(oldPassword[i] == confirmPass[i]){
-                same = true;
-                continue;
-            }else{
-                same = false;
-                break;
-            }
-        }
 
-        if(same)
-            currentUser.setPassword(newPassword);
+        if(oldPassword.equals(confirmPass))
+           currentUser.setPassword(newPassword);
+
 
         FieldOfStudy fieldOfStudy = buildFieldOfStudy();
+
         currentUser.setFieldOfStudy(fieldOfStudy);
 
         ArrayList<HonorsType> honorsTypes = null;
@@ -164,7 +168,7 @@ public class SettingsActivity extends ActionBarActivity {
                 "First Name: " + currentUser.getFirstName() +
                         "\nLast Name: " + currentUser.getLastName() +
                         "\nEmail: " + currentUser.getEmail() +
-                        "\nPassword: " + currentUser.getPassword() +
+                        "\nPassword: " + currentUser.getPassword().toString() +
                         "\nEID: " + currentUser.getEID() +
                         "\nHonors Types: " + honorsTypesString +
                         "\nMajor: " + currentUser.getFieldOfStudy().getMajors().get(0).toString() +
