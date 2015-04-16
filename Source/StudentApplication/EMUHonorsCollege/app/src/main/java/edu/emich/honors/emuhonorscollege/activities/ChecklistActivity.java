@@ -114,13 +114,22 @@ public class ChecklistActivity extends ActionBarActivity {
             requirementRow.addView(requirementCheckbox);
 
 
-            ImageView dropDownArrow = new ImageView(this);
+            final ImageView dropDownArrow = new ImageView(this);
             dropDownArrow.setImageResource(R.drawable.arrow_dropdown);
             dropDownArrow.setLayoutParams(new ActionBar.LayoutParams(125, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER));
-            dropDownArrow.setPadding(25,0,25,0);
+            dropDownArrow.setPadding(25, 0, 25, 0);
+            dropDownArrow.setRotation(-90);
             dropDownArrow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (dropDownArrow.getRotation() == -90)
+                    {
+                        dropDownArrow.setRotation(0);
+                    }
+                    else
+                    {
+                        dropDownArrow.setRotation(-90);
+                    }
                     Toast.makeText(getApplicationContext(), "Drop down!", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -191,19 +200,21 @@ public class ChecklistActivity extends ActionBarActivity {
 
     public void onCheck(View view, Requirement requirement)
     {
-        displayCoachingStep(requirement.getCoachingSteps(), (CheckBox) view);
+        displayCoachingStep(requirement, (CheckBox) view);
     }
 
     private class CoachingStepPositiveListener implements DialogInterface.OnClickListener
     {
         private boolean isLastCoachingStep;
         private CheckBox checkbox;
+        private Requirement requirement;
         private LinkedList<String> coachingSteps;
 
-        public CoachingStepPositiveListener(boolean isLastCoachingStep, LinkedList<String> coachingSteps, CheckBox checkbox) {
+        public CoachingStepPositiveListener(boolean isLastCoachingStep, Requirement requirement, CheckBox checkbox) {
             this.isLastCoachingStep = isLastCoachingStep;
             this.checkbox = checkbox;
-            this.coachingSteps = coachingSteps;
+            this.requirement = requirement;
+            this.coachingSteps = requirement.getCoachingSteps();
         }
 
         @Override
@@ -211,12 +222,16 @@ public class ChecklistActivity extends ActionBarActivity {
             if (isLastCoachingStep) {
                 Toast.makeText(getApplicationContext(), "Requirement completed!", Toast.LENGTH_SHORT).show();
                 checkbox.setChecked(true);
-
+                requirement.setInProgress(false);
+                requirement.setCompleted(true);
+                coachingSteps.removeFirst();
                 // Write to Database Here
             }
             else
             {
-                displayCoachingStep(coachingSteps, checkbox);
+                coachingSteps.removeFirst();
+                requirement.setInProgress(true);
+                displayCoachingStep(requirement, checkbox);
             }
         }
     }
@@ -224,25 +239,29 @@ public class ChecklistActivity extends ActionBarActivity {
     private class CoachingStepNegativeListener implements DialogInterface.OnClickListener
     {
         private CheckBox checkbox;
+        private Requirement requirement;
 
-        public CoachingStepNegativeListener(CheckBox checkbox) {
+        public CoachingStepNegativeListener(Requirement requirement, CheckBox checkbox) {
             this.checkbox = checkbox;
+            this.requirement = requirement;
         }
 
         @Override
         public void onClick(DialogInterface dialogInterface, int which) {
             Toast.makeText(getApplicationContext(), "Requirement still needs completion.", Toast.LENGTH_SHORT).show();
             checkbox.setChecked(false);
+
         }
     }
 
 
-    private void displayCoachingStep(LinkedList<String> coachingSteps, final CheckBox currentCheckBox)
+    private void displayCoachingStep(Requirement requirement, final CheckBox currentCheckBox)
     {
-        String coachingStep = coachingSteps.removeFirst();
+        LinkedList<String> coachingSteps = requirement.getCoachingSteps();
+        String coachingStep = coachingSteps.peek();
 
         final boolean isLastCoachingStep;
-        if (coachingSteps.isEmpty())
+        if (coachingSteps.peekLast().equals(coachingStep))
         {
             isLastCoachingStep = true;
         }
@@ -252,8 +271,8 @@ public class ChecklistActivity extends ActionBarActivity {
         }
 
         AlertDialog.Builder coachingAlert = new AlertDialog.Builder(this);
-        CoachingStepPositiveListener coachingStepPositiveListener = new CoachingStepPositiveListener(isLastCoachingStep, coachingSteps, currentCheckBox);
-        CoachingStepNegativeListener coachingStepNegativeListener = new CoachingStepNegativeListener(currentCheckBox);
+        CoachingStepPositiveListener coachingStepPositiveListener = new CoachingStepPositiveListener(isLastCoachingStep, requirement, currentCheckBox);
+        CoachingStepNegativeListener coachingStepNegativeListener = new CoachingStepNegativeListener(requirement, currentCheckBox);
 
 
         //  NOTE! Check box gets marked at the start of this action.

@@ -11,7 +11,8 @@ public class Requirement{
     private int numberOfCompleted;
     private  int numberRequiredForCompletion;
     private int hierarchyLevel;
-    private  LinkedList<String> coachingSteps;
+    private LinkedList<String> coachingSteps;
+    private boolean isInProgress = false;
 
     public Requirement() {
         this.name = "";
@@ -74,11 +75,23 @@ public class Requirement{
     }
 
     public LinkedList<String> getCoachingSteps() {
-        LinkedList<String> coachingStepsCopy = new LinkedList<>(coachingSteps);
-        return coachingStepsCopy;
+//        LinkedList<String> coachingStepsCopy = new LinkedList<>(coachingSteps);
+        return coachingSteps;
     }
 
     public int getHierarchyLevel() {
         return hierarchyLevel;
+    }
+
+    public boolean isInProgress() {
+        return isInProgress;
+    }
+
+    public void setInProgress(boolean isInProgress) {
+        this.isInProgress = isInProgress;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }
