@@ -105,7 +105,7 @@ public class ChecklistActivity extends ActionBarActivity {
             requirementCheckbox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onCheck(v, requirement);
+                    onCheck((CheckBox) v, requirement);
                 }
             });
             requirementCheckbox.setChecked(requirement.isCompleted());
@@ -147,9 +147,11 @@ public class ChecklistActivity extends ActionBarActivity {
             TextView requirementTitle = new TextView(this);
             requirementTitle.setText(requirement.getName());
             requirementTitle.setTextSize(34);
+
             final AlertDialog.Builder descriptionDialogBuilder = new AlertDialog.Builder(this);
             descriptionDialogBuilder.setTitle(requirement.getName());
             descriptionDialogBuilder.setMessage(requirement.getDescription());
+
             descriptionDialogBuilder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -160,7 +162,6 @@ public class ChecklistActivity extends ActionBarActivity {
             requirementTitle.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-
                     descriptionDialogBuilder.show();
                     return false;
                 }
@@ -198,9 +199,38 @@ public class ChecklistActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onCheck(View view, Requirement requirement)
+    public void onCheck(final CheckBox checkbox, final Requirement requirement)
     {
-        displayCoachingStep(requirement, (CheckBox) view);
+        if (checkbox.isChecked()){
+            displayCoachingStep(requirement, checkbox);
+        }
+        else  // The checkbox was already checked before!
+        {
+            AlertDialog.Builder markRequirementIncompleteAlert = new AlertDialog.Builder(this);
+            markRequirementIncompleteAlert.setMessage("Are you sure you'd like to mark this requirement as incomplete? You will lose all recorded progress for this requirement.");
+
+            markRequirementIncompleteAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    requirement.resetProgress();
+
+                    Toast.makeText(getApplicationContext(), "Requirement marked as incomplete.", Toast.LENGTH_SHORT).show();
+                    checkbox.setChecked(false);
+
+                    // Write to Database Here
+                }
+            });
+
+            markRequirementIncompleteAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(getApplicationContext(), "No change made.", Toast.LENGTH_SHORT).show();
+                    checkbox.setChecked(true);
+                }
+            });
+
+            markRequirementIncompleteAlert.show();
+        }
     }
 
     private class CoachingStepPositiveListener implements DialogInterface.OnClickListener
@@ -239,23 +269,20 @@ public class ChecklistActivity extends ActionBarActivity {
     private class CoachingStepNegativeListener implements DialogInterface.OnClickListener
     {
         private CheckBox checkbox;
-        private Requirement requirement;
 
-        public CoachingStepNegativeListener(Requirement requirement, CheckBox checkbox) {
+        public CoachingStepNegativeListener(CheckBox checkbox) {
             this.checkbox = checkbox;
-            this.requirement = requirement;
         }
 
         @Override
         public void onClick(DialogInterface dialogInterface, int which) {
             Toast.makeText(getApplicationContext(), "Requirement still needs completion.", Toast.LENGTH_SHORT).show();
             checkbox.setChecked(false);
-
         }
     }
 
 
-    private void displayCoachingStep(Requirement requirement, final CheckBox currentCheckBox)
+    private void displayCoachingStep(final Requirement requirement, final CheckBox currentCheckBox)
     {
         LinkedList<String> coachingSteps = requirement.getCoachingSteps();
         String coachingStep = coachingSteps.peek();
@@ -272,39 +299,11 @@ public class ChecklistActivity extends ActionBarActivity {
 
         AlertDialog.Builder coachingAlert = new AlertDialog.Builder(this);
         CoachingStepPositiveListener coachingStepPositiveListener = new CoachingStepPositiveListener(isLastCoachingStep, requirement, currentCheckBox);
-        CoachingStepNegativeListener coachingStepNegativeListener = new CoachingStepNegativeListener(requirement, currentCheckBox);
+        CoachingStepNegativeListener coachingStepNegativeListener = new CoachingStepNegativeListener(currentCheckBox);
 
-
-        //  NOTE! Check box gets marked at the start of this action.
-
-        if (currentCheckBox.isChecked())  // Just got checked
-        {
-            coachingAlert.setMessage(coachingStep);
-
-            coachingAlert.setPositiveButton("Yes", coachingStepPositiveListener);
-            coachingAlert.setNegativeButton("No", coachingStepNegativeListener);
-
-        }
-        else  // The checkbox was already checked before!
-        {
-            coachingAlert.setMessage("Are you sure you'd like to mark this requirement as incomplete?");
-            coachingAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(getApplicationContext(), "Requirement marked as incomplete.", Toast.LENGTH_SHORT).show();
-                    currentCheckBox.setChecked(false);
-
-                    // Write to Database Here
-                }
-            });
-            coachingAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(getApplicationContext(), "No change made.", Toast.LENGTH_SHORT).show();
-                    currentCheckBox.setChecked(true);
-                }
-            });
-        }
+        coachingAlert.setMessage(coachingStep);
+        coachingAlert.setPositiveButton("Yes", coachingStepPositiveListener);
+        coachingAlert.setNegativeButton("No", coachingStepNegativeListener);
 
         coachingAlert.show();
     }
