@@ -1,6 +1,37 @@
 <?php
 require_once 'connection.php';
 
+$to_return = '';
+
+if (isset($_POST['request'])) {
+
+  $content = json_decode($_POST['content']);
+  $db = open_connection();
+
+  switch ($_POST['request']) {
+    case 'login':
+
+      break;
+    case 'new_user':
+      break;
+    case 'handbook':
+      $sql = "SELECT *
+              FROM requirement
+              WHERE handbook_year=:year
+                  AND honors_type=:type;";
+      $stmt = $db->prepare($sql);
+      $stmt->execute($content);
+      $array_of_requirements = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+      $return_obj = (object) [
+        'requirements' => $array_of_requirements
+      ];
+      $to_return = json_encode($return_obj);
+      break;
+  }
+}
+
+echo $to_return;
 /*
 include_once 'connect.php';
 
@@ -34,6 +65,5 @@ if (isset($_POST['get_handbook'])) {
 $toReturn .= 'at least connected';
 }
 
-echo $toReturn;
 */
 ?>
