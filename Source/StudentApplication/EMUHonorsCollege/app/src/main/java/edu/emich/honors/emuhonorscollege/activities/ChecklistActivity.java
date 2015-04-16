@@ -1,5 +1,6 @@
 package edu.emich.honors.emuhonorscollege.activities;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -8,16 +9,27 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import edu.emich.honors.emuhonorscollege.R;
+import edu.emich.honors.emuhonorscollege.datatypes.Requirement;
+import edu.emich.honors.emuhonorscollege.datatypes.enums.HandbookYear;
+import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
 public class ChecklistActivity extends ActionBarActivity {
 
@@ -32,7 +44,9 @@ public class ChecklistActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checklist);
 
-        mDrawerList = (ListView)findViewById(R.id.navList);mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+//        Menu Setup
+        mDrawerList = (ListView)findViewById(R.id.navList);
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
 
         addDrawerItems();
@@ -40,8 +54,109 @@ public class ChecklistActivity extends ActionBarActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+
+
+//        Checklist Setup
+        LinearLayout parentLayout = (LinearLayout) findViewById(R.id.checklist_linear_layout);
+
+//        Placeholder for a real list of requirements pulled from the DB
+        ArrayList<Requirement> listOfRequirements = new ArrayList<>();
+        for (int i = 0; i < 8; i++)
+        {
+            Requirement tempRequirement = new Requirement("Requirement " + i, "Description goes here!", 3 );
+            if (i % 2 == 0)
+            {
+                tempRequirement.setNumberOfCompleted(3);
+            }
+            else
+            {
+                tempRequirement.addSubRequirement(new Requirement());
+            }
+            listOfRequirements.add(tempRequirement);
+        }
+
+        buildCheckList(listOfRequirements, parentLayout);
+
+
     }
 
+
+    public void buildCheckList(ArrayList<Requirement> listOfRequirements, LinearLayout parentLayout)
+    {
+        for (final Requirement requirement : listOfRequirements)
+        {
+            LinearLayout requirementRow = new LinearLayout(this);
+            requirementRow.setOrientation(LinearLayout.HORIZONTAL);
+            requirementRow.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            CheckBox requirementCheckbox = new CheckBox(this);
+            requirementCheckbox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onCheck(v);
+                }
+            });
+            requirementCheckbox.setChecked(requirement.isCompleted());
+            requirementCheckbox.setLayoutParams(new ActionBar.LayoutParams(75, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER));
+            requirementCheckbox.setHeight(ActionBar.LayoutParams.MATCH_PARENT);
+            requirementRow.addView(requirementCheckbox);
+
+
+            ImageView dropDownArrow = new ImageView(this);
+            dropDownArrow.setImageResource(R.drawable.arrow_dropdown);
+            dropDownArrow.setLayoutParams(new ActionBar.LayoutParams(125, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER));
+            dropDownArrow.setPadding(25,0,25,0);
+            dropDownArrow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(), "Drop down!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            if (requirement.hasSubRequirement())
+            {
+                dropDownArrow.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                dropDownArrow.setVisibility(View.INVISIBLE);
+            }
+            requirementRow.addView(dropDownArrow);
+
+
+
+
+            TextView requirementTitle = new TextView(this);
+            requirementTitle.setText(requirement.getName());
+            requirementTitle.setTextSize(34);
+            final AlertDialog.Builder descriptionDialogBuilder = new AlertDialog.Builder(this);
+            descriptionDialogBuilder.setTitle(requirement.getName());
+            descriptionDialogBuilder.setMessage(requirement.getDescription());
+            descriptionDialogBuilder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+
+            requirementTitle.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    descriptionDialogBuilder.show();
+                    return false;
+                }
+            });
+
+
+
+
+
+            requirementRow.addView(requirementTitle);
+
+            parentLayout.addView(requirementRow);
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -124,7 +239,7 @@ public class ChecklistActivity extends ActionBarActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch(position) {
+                switch (position) {
                     case 0:
                         Intent a = new Intent(ChecklistActivity.this, SettingsActivity.class);
                         startActivity(a);
