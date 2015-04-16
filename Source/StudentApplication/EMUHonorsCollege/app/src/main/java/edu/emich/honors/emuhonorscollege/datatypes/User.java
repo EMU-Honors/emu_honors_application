@@ -43,6 +43,8 @@ public class User {
         this.password = password;
     }
 
+    public char[] getPassword() {return password;}
+
     public ArrayList<HonorsType> getHonorsTypes() {
         return honorsTypes;
     }
