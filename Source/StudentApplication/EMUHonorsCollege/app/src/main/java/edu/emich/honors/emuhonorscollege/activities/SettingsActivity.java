@@ -69,6 +69,23 @@ public class SettingsActivity extends ActionBarActivity {
         fullHonorsCheckBox = (CheckBox) findViewById(R.id.fullHonorsCheckBox);
         submitButton = (Button) findViewById(R.id.new_settings_submit);
 
+        //dummy data
+        ArrayList<HonorsType> hTypeTest = null;
+
+        ArrayList<AcademicProgram> aMajorTest = null;
+        ArrayList<AcademicProgram> aMinorTest = null;
+        aMajorTest.add(AcademicProgram.COMPUTER_SCIENCE);
+        aMinorTest.add(AcademicProgram.MATH);
+        GraduationDate gradTest = new GraduationDate(GraduationTerm.FALL, "2015");
+        FieldOfStudy fOfStudyTest = new FieldOfStudy(aMajorTest, aMinorTest);
+        hTypeTest.add(HonorsType.DEPARTMENTAL);
+        hTypeTest.add(HonorsType.HIGHEST);
+        char pasTest[];
+        String test = "password";
+        pasTest = test.toCharArray();
+
+        User currentUser = new User("ttaylo@emich",pasTest , "travis", "taylor", hTypeTest, "009234", fOfStudyTest, gradTest);
+
         //setting checkboxes
         ArrayList<HonorsType> honorsCheck = currentUser.getHonorsTypes();
         for(int i=0; i<honorsCheck.size(); i++){
