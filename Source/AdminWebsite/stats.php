@@ -1,11 +1,29 @@
 <?php
 session_start();
+include_once 'connection.php';
 
 if ($_POST['username'] == 'admin' && $_POST['password'] == 'admin') {
-  $_SESSION['logged_in'] = 'admin';
+	$_SESSION['logged_in'] = 'admin';
 }
 
 $thisPage="stats";
+
+$db = open_connection();
+
+$sql = "SELECT count(*), handbook_year 
+		FROM student 
+		GROUP BY handbook_year 
+		ORDER BY handbook_year;";
+$stmt = $db->prepare($sql);
+$stmt->execute();
+
+// set the resulting array to associative
+while($result = $stmt->fetch(PDO::FETCH_ASSOC)){
+	foreach($result as $k=>$v) {
+		echo $k . " " . $v . "<br />";
+	}
+}
+
 ?>
 <!doctype html>
 <html>
