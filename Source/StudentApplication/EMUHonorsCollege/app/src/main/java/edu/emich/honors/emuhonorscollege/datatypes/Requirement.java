@@ -1,18 +1,17 @@
 package edu.emich.honors.emuhonorscollege.datatypes;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
-/**
- * Created by stefano on 3/21/15.
- */
 public class Requirement{
-    private String name;
-    private String description;
+    private  String name;
+    private  String description;
     private ArrayList<Requirement> subRequirements;
     private boolean completed;
     private int numberOfCompleted;
-    private int numberRequiredForCompletion;
+    private  int numberRequiredForCompletion;
     private int hierarchyLevel;
+    private  LinkedList<String> coachingSteps;
 
     public Requirement() {
         this.name = "";
@@ -22,29 +21,24 @@ public class Requirement{
         this.numberOfCompleted = 0;
         this.numberRequiredForCompletion = 1;
         this.hierarchyLevel = 1;
+        this.coachingSteps = new LinkedList<String>();
     }
 
-    public Requirement(String requirementName, String description, int numberRequiredForCompletion) {
+    public Requirement(String requirementName, String description, int numberRequiredForCompletion, LinkedList<String> coachingSteps) {
         this();
         this.name = requirementName;
         this.description = description;
         this.numberRequiredForCompletion = numberRequiredForCompletion;
+        this.coachingSteps = coachingSteps;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public int getNumberOfCompleted() {
@@ -58,11 +52,6 @@ public class Requirement{
 
     public int getNumberRequiredForCompletion() {
         return numberRequiredForCompletion;
-    }
-
-    public void setNumberRequiredForCompletion(int numberRequiredForCompletion) {
-        this.numberRequiredForCompletion = numberRequiredForCompletion;
-        completed = (this.getNumberOfCompleted() >= this.getNumberRequiredForCompletion());
     }
 
     public boolean hasSubRequirement()
@@ -82,5 +71,14 @@ public class Requirement{
     {
         subRequirementToAdd.hierarchyLevel++;
         subRequirements.add(subRequirementToAdd);
+    }
+
+    public LinkedList<String> getCoachingSteps() {
+        LinkedList<String> coachingStepsCopy = new LinkedList<>(coachingSteps);
+        return coachingStepsCopy;
+    }
+
+    public int getHierarchyLevel() {
+        return hierarchyLevel;
     }
 }

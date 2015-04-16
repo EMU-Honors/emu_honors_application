@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -25,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import edu.emich.honors.emuhonorscollege.R;
 import edu.emich.honors.emuhonorscollege.datatypes.Requirement;
@@ -64,7 +64,12 @@ public class ChecklistActivity extends ActionBarActivity {
         ArrayList<Requirement> tempListOfRequirements = new ArrayList<>();
         for (int i = 0; i < 8; i++)
         {
-            Requirement tempRequirement = new Requirement("Requirement " + i, "Description goes here!", 3 );
+            LinkedList<String> dummyCoachingSteps = new LinkedList<String>();
+            dummyCoachingSteps.add("Did you put your left foot in?");
+            dummyCoachingSteps.add("Did you put your left foot out?");
+            dummyCoachingSteps.add("Did you put your left foot in and shake it all about?");
+
+            Requirement tempRequirement = new Requirement("Requirement " + i, "Description goes here!", 3 , dummyCoachingSteps);
             if (i % 2 == 0)
             {
                 tempRequirement.setNumberOfCompleted(3);
@@ -86,10 +91,7 @@ public class ChecklistActivity extends ActionBarActivity {
         parentLayout.addView(honorsTypeTitle);
 
         buildCheckList(tempListOfRequirements, parentLayout);
-
-
     }
-
 
     public void buildCheckList(ArrayList<Requirement> listOfRequirements, LinearLayout parentLayout)
     {
@@ -103,7 +105,7 @@ public class ChecklistActivity extends ActionBarActivity {
             requirementCheckbox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onCheck(v);
+                    onCheck(v, requirement);
                 }
             });
             requirementCheckbox.setChecked(requirement.isCompleted());
@@ -133,9 +135,6 @@ public class ChecklistActivity extends ActionBarActivity {
             }
             requirementRow.addView(dropDownArrow);
 
-
-
-
             TextView requirementTitle = new TextView(this);
             requirementTitle.setText(requirement.getName());
             requirementTitle.setTextSize(34);
@@ -157,10 +156,6 @@ public class ChecklistActivity extends ActionBarActivity {
                     return false;
                 }
             });
-
-
-
-
 
             requirementRow.addView(requirementTitle);
 
@@ -194,46 +189,100 @@ public class ChecklistActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onCheck(View view)
+    public void onCheck(View view, Requirement requirement)
     {
+        displayCoachingStep(requirement.getCoachingSteps(), (CheckBox) view);
+    }
+
+    private class CoachingStepPositiveListener implements DialogInterface.OnClickListener
+    {
+        private boolean isLastCoachingStep;
+        private CheckBox checkbox;
+        private LinkedList<String> coachingSteps;
+
+        public CoachingStepPositiveListener(boolean isLastCoachingStep, LinkedList<String> coachingSteps, CheckBox checkbox) {
+            this.isLastCoachingStep = isLastCoachingStep;
+            this.checkbox = checkbox;
+            this.coachingSteps = coachingSteps;
+        }
+
+        @Override
+        public void onClick(DialogInterface dialogInterface, int which) {
+            if (isLastCoachingStep) {
+                Toast.makeText(getApplicationContext(), "Requirement completed!", Toast.LENGTH_SHORT).show();
+                checkbox.setChecked(true);
+
+                // Write to Database Here
+            }
+            else
+            {
+                displayCoachingStep(coachingSteps, checkbox);
+            }
+        }
+    }
+
+    private class CoachingStepNegativeListener implements DialogInterface.OnClickListener
+    {
+        private CheckBox checkbox;
+
+        public CoachingStepNegativeListener(CheckBox checkbox) {
+            this.checkbox = checkbox;
+        }
+
+        @Override
+        public void onClick(DialogInterface dialogInterface, int which) {
+            Toast.makeText(getApplicationContext(), "Requirement still needs completion.", Toast.LENGTH_SHORT).show();
+            checkbox.setChecked(false);
+        }
+    }
+
+
+    private void displayCoachingStep(LinkedList<String> coachingSteps, final CheckBox currentCheckBox)
+    {
+        String coachingStep = coachingSteps.removeFirst();
+
+        final boolean isLastCoachingStep;
+        if (coachingSteps.isEmpty())
+        {
+            isLastCoachingStep = true;
+        }
+        else
+        {
+            isLastCoachingStep = false;
+        }
+
         AlertDialog.Builder coachingAlert = new AlertDialog.Builder(this);
+        CoachingStepPositiveListener coachingStepPositiveListener = new CoachingStepPositiveListener(isLastCoachingStep, coachingSteps, currentCheckBox);
+        CoachingStepNegativeListener coachingStepNegativeListener = new CoachingStepNegativeListener(currentCheckBox);
 
-        final CheckBox currentCheckBox = (CheckBox) view; //Check box gets marked at the start of this action.
-        if (!currentCheckBox.isChecked()) {
+
+        //  NOTE! Check box gets marked at the start of this action.
+
+        if (currentCheckBox.isChecked())  // Just got checked
+        {
+            coachingAlert.setMessage(coachingStep);
+
+            coachingAlert.setPositiveButton("Yes", coachingStepPositiveListener);
+            coachingAlert.setNegativeButton("No", coachingStepNegativeListener);
+
+        }
+        else  // The checkbox was already checked before!
+        {
             coachingAlert.setMessage("Are you sure you'd like to mark this requirement as incomplete?");
-
             coachingAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Toast.makeText(getApplicationContext(), "Requirement marked as incomplete.", Toast.LENGTH_SHORT).show();
                     currentCheckBox.setChecked(false);
+
+                    // Write to Database Here
                 }
             });
-
             coachingAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Toast.makeText(getApplicationContext(), "No change made.", Toast.LENGTH_SHORT).show();
                     currentCheckBox.setChecked(true);
-                }
-            });
-        }
-        else {
-            coachingAlert.setMessage("Have you completed all the steps necessary for this requirement?");
-
-            coachingAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(getApplicationContext(), "Requirement completed!", Toast.LENGTH_SHORT).show();
-                    currentCheckBox.setChecked(true);
-                }
-            });
-
-            coachingAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(getApplicationContext(), "Requirement still needs completion.", Toast.LENGTH_SHORT).show();
-                    currentCheckBox.setChecked(false);
                 }
             });
         }
