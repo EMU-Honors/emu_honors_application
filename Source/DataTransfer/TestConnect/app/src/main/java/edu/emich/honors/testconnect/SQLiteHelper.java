@@ -9,7 +9,7 @@ import android.util.Log;
 /**
  * Created by Jordan on 4/10/2015.
  */
-public class SQLiteHelper extends SQLiteOpenHelper{
+public class SQLiteHelper extends SQLiteOpenHelper {
 
 //table info
     public static final String LOCAL_DB_NAME = "local_db";

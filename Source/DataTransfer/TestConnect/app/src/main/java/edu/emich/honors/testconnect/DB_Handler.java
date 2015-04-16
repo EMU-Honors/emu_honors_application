@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -28,9 +29,8 @@ import java.util.List;
 public class DB_Handler {
 
     private HttpClient client;
-    private final String DESTINATION = "http://db2.emich.edu/~201501_cosc481_group01/android_test.php";
+    private final String DESTINATION = "http://db2.emich.edu/~201501_cosc481_group01/ajax_handler.php";
     private Context context;
-
 
     //constructor
     public DB_Handler(Context context){
@@ -62,10 +62,11 @@ public class DB_Handler {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        Log.d("result",result);
         JSONObject jsonResult = null;
         try {
-            jsonResult = new JSONObject( result);
+            jsonResult = new JSONObject(result);
+//            jsonResult = new JSONObject( "{"+result+"}");
         } catch (JSONException e) {
             e.printStackTrace();
         }
