@@ -6,7 +6,7 @@ import java.util.LinkedList;
 public class Requirement{
     private  String name;
     private  String description;
-    private ArrayList<Requirement> subRequirements;
+    private ArrayList<Requirement> components;
     private boolean completed;
     private int numberOfCompleted;
     private  int numberRequiredForCompletion;
@@ -18,7 +18,7 @@ public class Requirement{
     public Requirement() {
         this.name = "";
         this.description = "";
-        this.subRequirements = new ArrayList<>();
+        this.components = new ArrayList<>();
         this.completed = false;
         this.numberOfCompleted = 0;
         this.numberRequiredForCompletion = 1;
@@ -27,10 +27,12 @@ public class Requirement{
         this.persistentCoachingSteps = new LinkedList<>();
     }
 
-    public Requirement(String requirementName, String description, int numberRequiredForCompletion, LinkedList<String> coachingSteps) {
+    public Requirement(String requirementName,
+                       int numberRequiredForCompletion,
+                       LinkedList<String> coachingSteps)
+    {
         this();
         this.name = requirementName;
-        this.description = description;
         this.numberRequiredForCompletion = numberRequiredForCompletion;
         this.coachingSteps = coachingSteps;
         this.persistentCoachingSteps = new LinkedList<>(coachingSteps);
@@ -39,7 +41,6 @@ public class Requirement{
     public String getName() {
         return name;
     }
-
 
     public String getDescription() {
         return description;
@@ -58,23 +59,23 @@ public class Requirement{
         return numberRequiredForCompletion;
     }
 
-    public boolean hasSubRequirement()
+    public boolean hasComponent()
     {
-        return !this.getSubRequirements().isEmpty();
+        return !this.getComponents().isEmpty();
     }
 
-    public ArrayList<Requirement> getSubRequirements() {
-        return subRequirements;
+    public ArrayList<Requirement> getComponents() {
+        return components;
     }
 
     public boolean isCompleted() {
         return completed;
     }
 
-    public void addSubRequirement(Requirement subRequirementToAdd)
+    public void addComponent(Requirement componentToAdd)
     {
-        subRequirementToAdd.hierarchyLevel++;
-        subRequirements.add(subRequirementToAdd);
+        componentToAdd.hierarchyLevel++;
+        components.add(componentToAdd);
     }
 
     public LinkedList<String> getCoachingSteps() {

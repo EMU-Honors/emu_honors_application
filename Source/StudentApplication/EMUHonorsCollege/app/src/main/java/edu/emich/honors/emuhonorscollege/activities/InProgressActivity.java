@@ -10,12 +10,9 @@ import android.app.ActionBar;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.LinearLayout;
 
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.EditText;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -40,7 +37,6 @@ import java.util.LinkedList;
 import edu.emich.honors.emuhonorscollege.R;
 import edu.emich.honors.emuhonorscollege.datatypes.Requirement;
 import edu.emich.honors.emuhonorscollege.datatypes.RequirementsList;
-import edu.emich.honors.emuhonorscollege.datatypes.User;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HandbookYear;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
@@ -85,17 +81,17 @@ public class InProgressActivity extends ActionBarActivity {
             dummyCoachingSteps.add("Did you put your left foot out?");
             dummyCoachingSteps.add("Did you put your left foot in and shake it all about?");
 
-            Requirement tempRequirement = new Requirement("Requirement " + i, "Description goes here!", 3 , dummyCoachingSteps);
+            Requirement tempComponent = new Requirement("Requirement " + i, 3 , dummyCoachingSteps);
             if (i % 2 == 0)
             {
-                tempRequirement.setNumberOfCompleted(3);
+                tempComponent.setNumberOfCompleted(3);
             }
             else
             {
-                tempRequirement.addSubRequirement(new Requirement());
-                tempRequirement.setInProgress(true);
+                tempComponent.addComponent(new Requirement());
+                tempComponent.setInProgress(true);
             }
-            tempListOfRequirements.add(tempRequirement);
+            tempListOfRequirements.add(tempComponent);
         }
         RequirementsList requirementsList = new RequirementsList(HandbookYear.YEAR_2014, HonorsType.UNIVERSITY, tempListOfRequirements);
 
@@ -148,7 +144,7 @@ public class InProgressActivity extends ActionBarActivity {
                     }
                 });
 
-                if (requirement.hasSubRequirement())
+                if (requirement.hasComponent())
                 {
                     dropDownArrow.setVisibility(View.VISIBLE);
                 }

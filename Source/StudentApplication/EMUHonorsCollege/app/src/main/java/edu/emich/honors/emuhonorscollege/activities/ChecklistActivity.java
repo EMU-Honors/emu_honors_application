@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,16 +68,16 @@ public class ChecklistActivity extends ActionBarActivity {
             dummyCoachingSteps.add("Did you put your left foot out?");
             dummyCoachingSteps.add("Did you put your left foot in and shake it all about?");
 
-            Requirement tempRequirement = new Requirement("Requirement " + i, "Description goes here!", 3 , dummyCoachingSteps);
+            Requirement tempComponent = new Requirement("Requirement " + i, 3 , dummyCoachingSteps);
             if (i % 2 == 0)
             {
-                tempRequirement.setNumberOfCompleted(3);
+                tempComponent.setNumberOfCompleted(3);
             }
             else
             {
-                tempRequirement.addSubRequirement(new Requirement());
+                tempComponent.addComponent(new Requirement());
             }
-            tempListOfRequirements.add(tempRequirement);
+            tempListOfRequirements.add(tempComponent);
         }
 
         RequirementsList requirementsList = new RequirementsList(HandbookYear.YEAR_2014, HonorsType.UNIVERSITY, tempListOfRequirements);
@@ -134,7 +133,7 @@ public class ChecklistActivity extends ActionBarActivity {
                 }
             });
 
-            if (requirement.hasSubRequirement())
+            if (requirement.hasComponent())
             {
                 dropDownArrow.setVisibility(View.VISIBLE);
             }
