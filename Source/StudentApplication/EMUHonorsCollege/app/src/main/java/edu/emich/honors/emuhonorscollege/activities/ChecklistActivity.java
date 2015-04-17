@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.ActionBarActivity;
@@ -38,6 +39,8 @@ public class ChecklistActivity extends ActionBarActivity {
     private ArrayAdapter<String> mAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
+    private String completedGreen = "#669900";
+    private String inProgressYellow = "#FFBB33";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,7 @@ public class ChecklistActivity extends ActionBarActivity {
         honorsTypeTitle.setText(requirementsList.getHonorsType().toString());
         honorsTypeTitle.setTextSize(40);
         honorsTypeTitle.setGravity(Gravity.CENTER_HORIZONTAL);
+        honorsTypeTitle.setTextColor(Color.BLACK);
 
         parentLayout.addView(honorsTypeTitle);
 
@@ -146,6 +150,18 @@ public class ChecklistActivity extends ActionBarActivity {
             TextView requirementTitle = new TextView(this);
             requirementTitle.setText(requirement.getName());
             requirementTitle.setTextSize(34);
+            if (requirement.isCompleted())
+            {
+                requirementTitle.setTextColor(Color.parseColor(completedGreen));
+            }
+            else if (requirement.isInProgress())
+            {
+                requirementTitle.setTextColor(Color.parseColor(inProgressYellow));
+            }
+            else
+            {
+                requirementTitle.setTextColor(Color.BLACK);
+            }
 
             final AlertDialog.Builder descriptionDialogBuilder = new AlertDialog.Builder(this);
             descriptionDialogBuilder.setTitle(requirement.getName());
@@ -210,6 +226,17 @@ public class ChecklistActivity extends ActionBarActivity {
                     Toast.makeText(getApplicationContext(), "Requirement marked as incomplete.", Toast.LENGTH_SHORT).show();
                     checkbox.setChecked(false);
 
+                    ViewGroup row = (ViewGroup) checkbox.getParent();
+
+                    for (int viewIndex = 0; viewIndex < row.getChildCount(); viewIndex++)
+                    {
+                        View view = row.getChildAt(viewIndex);
+                        if (view instanceof TextView)
+                        {
+                            ((TextView) view).setTextColor(Color.BLACK);
+                        }
+                    }
+
                     // Write to Database Here
                 }
             });
@@ -248,12 +275,36 @@ public class ChecklistActivity extends ActionBarActivity {
                 requirement.setInProgress(false);
                 requirement.setCompleted(true);
                 coachingSteps.removeFirst();
+
+                ViewGroup row = (ViewGroup) checkbox.getParent();
+
+                for (int viewIndex = 0; viewIndex < row.getChildCount(); viewIndex++)
+                {
+                    View view = row.getChildAt(viewIndex);
+                    if (view instanceof TextView)
+                    {
+                        ((TextView) view).setTextColor(Color.parseColor(completedGreen));
+                    }
+                }
+
                 // Write to Database Here
             }
             else
             {
                 coachingSteps.removeFirst();
                 requirement.setInProgress(true);
+
+                ViewGroup row = (ViewGroup) checkbox.getParent();
+
+                for (int viewIndex = 0; viewIndex < row.getChildCount(); viewIndex++)
+                {
+                    View view = row.getChildAt(viewIndex);
+                    if (view instanceof TextView)
+                    {
+                        ((TextView) view).setTextColor(Color.parseColor(inProgressYellow));
+                    }
+                }
+
                 displayCoachingStep(requirement, checkbox);
             }
         }
