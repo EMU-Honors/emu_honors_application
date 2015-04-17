@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.CheckBox;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Space;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -30,8 +30,6 @@ import java.util.LinkedList;
 import edu.emich.honors.emuhonorscollege.R;
 import edu.emich.honors.emuhonorscollege.datatypes.Requirement;
 import edu.emich.honors.emuhonorscollege.datatypes.RequirementsList;
-import edu.emich.honors.emuhonorscollege.datatypes.enums.HandbookYear;
-import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
 public class ChecklistActivity extends ActionBarActivity {
 
@@ -40,9 +38,11 @@ public class ChecklistActivity extends ActionBarActivity {
     private ArrayAdapter<String> mAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
-    private String completedGreen = "#669900";
-    private String inProgressYellow = "#FFBB33";
+    private final String COMPLETED_GREEN = "#669900";
+    private final String IN_PROGRESS_YELLOW = "#FFBB33";
     private int indentationSize = 100;
+    private final int COLLAPSED = -90;
+    private final int EXPANDED = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,21 +89,18 @@ public class ChecklistActivity extends ActionBarActivity {
     }
 
     private void buildRequirementRow(final Requirement requirement, LinearLayout parentLayout) {
+        if (requirement.hasComponent())
+        {
+            LinearLayout requirementBlock = new LinearLayout(this);
+            requirementBlock.setOrientation(LinearLayout.VERTICAL);
+            requirementBlock.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            parentLayout.addView(requirementBlock);
+            parentLayout = requirementBlock;
+        }
+
         LinearLayout requirementRow = new LinearLayout(this);
         requirementRow.setOrientation(LinearLayout.HORIZONTAL);
         requirementRow.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-        if (requirement.getHierarchyLevel() == 0)
-        {
-
-        }
-        else {
-            for (int numberOfPaddingBlocks = 0; numberOfPaddingBlocks < requirement.getHierarchyLevel(); numberOfPaddingBlocks++) {
-                Space space = new Space(this);
-                space.setMinimumWidth(100);
-                requirementRow.addView(space);
-            }
-        }
 
         CheckBox requirementCheckbox = new CheckBox(this);
         requirementCheckbox.setOnClickListener(new View.OnClickListener() {
@@ -115,26 +112,39 @@ public class ChecklistActivity extends ActionBarActivity {
         requirementCheckbox.setChecked(requirement.isCompleted());
         requirementCheckbox.setLayoutParams(new ActionBar.LayoutParams(75, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER));
         requirementCheckbox.setHeight(ActionBar.LayoutParams.MATCH_PARENT);
-        requirementRow.addView(requirementCheckbox);
 
+        if (requirement.getHierarchyLevel() == 0)
+        {
+            requirementCheckbox.setClickable(false);
+        }
+        else {
+            requirementRow.setVisibility(View.GONE);
+            for (int numberOfPaddingBlocks = 0; numberOfPaddingBlocks < requirement.getHierarchyLevel(); numberOfPaddingBlocks++) {
+                Space space = new Space(this);
+                space.setMinimumWidth(indentationSize);
+                requirementRow.addView(space);
+            }
+        }
+
+        requirementRow.addView(requirementCheckbox);
 
         final ImageView dropDownArrow = new ImageView(this);
         dropDownArrow.setImageResource(R.drawable.arrow_dropdown);
         dropDownArrow.setLayoutParams(new ActionBar.LayoutParams(125, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER));
         dropDownArrow.setPadding(25, 0, 25, 0);
-        dropDownArrow.setRotation(-90);
+        dropDownArrow.setRotation(COLLAPSED);
         dropDownArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (dropDownArrow.getRotation() == -90)
+                if (dropDownArrow.getRotation() == COLLAPSED)
                 {
-                    dropDownArrow.setRotation(0);
+                    dropDownArrow.setRotation(EXPANDED);
                 }
                 else
                 {
-                    dropDownArrow.setRotation(-90);
+                    dropDownArrow.setRotation(COLLAPSED);
                 }
-                Toast.makeText(getApplicationContext(), "Drop down!", Toast.LENGTH_SHORT).show();
+                toggleComponentDropDown(v);
             }
         });
 
@@ -151,7 +161,6 @@ public class ChecklistActivity extends ActionBarActivity {
         TextView requirementTitle = new TextView(this);
         requirementTitle.setText(requirement.getName());
 
-
         if (requirement.getHierarchyLevel() == 0)  // Heading Requirement
         {
             requirementTitle.setTextSize(26);
@@ -162,11 +171,11 @@ public class ChecklistActivity extends ActionBarActivity {
 
         if (requirement.isCompleted())
         {
-            requirementTitle.setTextColor(Color.parseColor(completedGreen));
+            requirementTitle.setTextColor(Color.parseColor(COMPLETED_GREEN));
         }
         else if (requirement.isInProgress())
         {
-            requirementTitle.setTextColor(Color.parseColor(inProgressYellow));
+            requirementTitle.setTextColor(Color.parseColor(IN_PROGRESS_YELLOW));
         }
         else
         {
@@ -200,6 +209,22 @@ public class ChecklistActivity extends ActionBarActivity {
         {
             buildRequirementRow(component, parentLayout);
         }
+    }
+
+    private void toggleComponentDropDown(View view)
+    {
+        ViewParent requirementRow = view.getParent();
+        ViewGroup requirementBlock = (ViewGroup) requirementRow.getParent();
+
+        for (int rowIndex = 1; rowIndex < requirementBlock.getChildCount(); rowIndex++)
+        {
+            View componentRow = requirementBlock.getChildAt(rowIndex);
+            if (view.getRotation() == COLLAPSED)
+                componentRow.setVisibility(View.GONE);
+            else
+                componentRow.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
@@ -236,8 +261,6 @@ public class ChecklistActivity extends ActionBarActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     requirement.resetProgress();
-
-                    Toast.makeText(getApplicationContext(), "Requirement marked as incomplete.", Toast.LENGTH_SHORT).show();
                     checkbox.setChecked(false);
 
                     ViewGroup row = (ViewGroup) checkbox.getParent();
@@ -251,6 +274,7 @@ public class ChecklistActivity extends ActionBarActivity {
                         }
                     }
 
+                    updateRequirementTextColor(checkbox, requirement);
                     // Write to Database Here
                 }
             });
@@ -258,7 +282,6 @@ public class ChecklistActivity extends ActionBarActivity {
             markRequirementIncompleteAlert.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(getApplicationContext(), "No change made.", Toast.LENGTH_SHORT).show();
                     checkbox.setChecked(true);
                 }
             });
@@ -284,25 +307,12 @@ public class ChecklistActivity extends ActionBarActivity {
         @Override
         public void onClick(DialogInterface dialogInterface, int which) {
             if (isLastCoachingStep) {
-                Toast.makeText(getApplicationContext(), "Requirement completed!", Toast.LENGTH_SHORT).show();
                 checkbox.setChecked(true);
                 requirement.setInProgress(false);
                 requirement.setCompleted(true);
                 coachingSteps.removeFirst();
 
-                ViewGroup row = (ViewGroup) checkbox.getParent();
-
-                for (int viewIndex = 0; viewIndex < row.getChildCount(); viewIndex++)
-                {
-                    View view = row.getChildAt(viewIndex);
-                    if (view instanceof TextView)
-                    {
-                        ((TextView) view).setTextColor(Color.parseColor(completedGreen));
-                    }
-                }
-
-
-
+                updateRequirementTextColor(checkbox, requirement);
                 // Write to Database Here
             }
             else
@@ -310,19 +320,74 @@ public class ChecklistActivity extends ActionBarActivity {
                 coachingSteps.removeFirst();
                 requirement.setInProgress(true);
 
-                ViewGroup row = (ViewGroup) checkbox.getParent();
+                displayCoachingStep(requirement, checkbox);
+            }
+        }
+    }
 
-                for (int viewIndex = 0; viewIndex < row.getChildCount(); viewIndex++)
+    private void updateRequirementTextColor(CheckBox checkbox, Requirement requirement) {
+        ViewGroup row = (ViewGroup) checkbox.getParent();
+        TextView requirementTextView = null;
+
+        for (int viewIndex = 0; viewIndex < row.getChildCount(); viewIndex++)
+        {
+            View view = row.getChildAt(viewIndex);
+            if (view instanceof TextView && !(view instanceof CheckBox))
+            {
+                requirementTextView = (TextView) view;
+                break;
+            }
+        }
+
+        if (checkbox.isChecked())
+        {
+            requirementTextView.setTextColor(Color.parseColor(COMPLETED_GREEN));
+
+        }
+        else
+        {
+            requirementTextView.setTextColor(Color.BLACK);
+        }
+
+        ViewGroup block = (ViewGroup) row.getParent();
+        TextView parentRequirementTextView = null;
+        CheckBox parentRequirementCheckBox = null;
+        for (int viewIndex = 0; viewIndex < block.getChildCount(); viewIndex++)
+        {
+            View view = block.getChildAt(viewIndex);
+            if (view instanceof LinearLayout)
+            {
+                ViewGroup parentRow = (ViewGroup) view;
+                for (int viewIndex2 = 0; viewIndex2 < parentRow.getChildCount(); viewIndex2++)
                 {
-                    View view = row.getChildAt(viewIndex);
-                    if (view instanceof TextView)
+                    View view2 = parentRow.getChildAt(viewIndex2);
+                    if (view2 instanceof  CheckBox)
                     {
-                        ((TextView) view).setTextColor(Color.parseColor(inProgressYellow));
+                        parentRequirementCheckBox = (CheckBox) view2;
+                    }
+                    else if (view2 instanceof TextView)
+                    {
+                        parentRequirementTextView = (TextView) view2;
                     }
                 }
 
-                displayCoachingStep(requirement, checkbox);
+                break;
             }
+        }
+
+        if (requirement.getParentRequirement().isCompleted()) {
+            parentRequirementTextView.setTextColor(Color.parseColor(COMPLETED_GREEN));
+            parentRequirementCheckBox.setChecked(true);
+        }
+        else if (requirement.getParentRequirement().isInProgress())
+        {
+            parentRequirementTextView.setTextColor(Color.parseColor(IN_PROGRESS_YELLOW));
+            parentRequirementCheckBox.setChecked(false);
+        }
+        else
+        {
+            parentRequirementTextView.setTextColor(Color.BLACK);
+            parentRequirementCheckBox.setChecked(false);
         }
     }
 
@@ -336,7 +401,6 @@ public class ChecklistActivity extends ActionBarActivity {
 
         @Override
         public void onClick(DialogInterface dialogInterface, int which) {
-            Toast.makeText(getApplicationContext(), "Requirement still needs completion.", Toast.LENGTH_SHORT).show();
             checkbox.setChecked(false);
         }
     }

@@ -73,13 +73,19 @@ public class Requirement{
     public boolean isCompleted() {
         boolean isCompleteFlag = true;
 
-        for (Requirement component : components)
-        {
-            if (!component.isCompleted())
+        if (this.hasComponent()){
+            for (Requirement component : components)
             {
-                isCompleteFlag = false;
-                break;
+                if (!component.isCompleted())
+                {
+                    isCompleteFlag = false;
+                    break;
+                }
             }
+        }
+        else
+        {
+            isCompleteFlag = completed;
         }
 
         return isCompleteFlag;
@@ -106,17 +112,19 @@ public class Requirement{
     }
 
     public boolean isInProgress() {
-        boolean isInProgressFlag = true;
+        if (this.isCompleted())
+            return false;
 
-        for (Requirement component : components)
-        {
-            if (!component.isCompleted())
-            {
-                isInProgressFlag = false;
-                break;
+        if (this.hasComponent()) {
+            for (Requirement component : components) {
+                if (component.isCompleted()) {
+                    return true;
+                }
             }
         }
-        return isInProgressFlag;
+
+        return false;  // Can't be in progress if no components
+
     }
 
     public boolean hasParentRequirement()
@@ -135,6 +143,10 @@ public class Requirement{
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+        if (this.hasParentRequirement())
+        {
+            this.getParentRequirement().isInProgress();
+        }
     }
 
     public void resetCoachingSteps()

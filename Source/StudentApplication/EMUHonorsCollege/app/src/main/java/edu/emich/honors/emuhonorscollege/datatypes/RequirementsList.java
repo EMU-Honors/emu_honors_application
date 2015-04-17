@@ -49,7 +49,14 @@ public class RequirementsList {
     {
         ArrayList<Requirement> sampleRequirements = new ArrayList<>();
 
-        sampleRequirements.add(new Requirement("Coursework", 12, new LinkedList<>(Arrays.asList("Did you complete a 3 credit hour Honors course with a grade of B- or better?"))));
+        Requirement courseworkRequirement = new Requirement("Coursework", 12, new LinkedList<String>());
+        courseworkRequirement.addComponent(new Requirement("Major/Minor Honors Course", 1, new LinkedList<>(Arrays.asList("Did you complete a 3 credit hour Honors course in your declared Major or Minor with a grade of B- or better?"))));
+        courseworkRequirement.addComponent(new Requirement("Major/Minor Honors Course", 1, new LinkedList<>(Arrays.asList("Did you complete a 3 credit hour Honors course in your declared Major or Minor with a grade of B- or better?"))));
+        courseworkRequirement.addComponent(new Requirement("Major/Minor Honors Course", 1, new LinkedList<>(Arrays.asList("Did you complete a 3 credit hour Honors course in your declared Major or Minor with a grade of B- or better?"))));
+        courseworkRequirement.addComponent(new Requirement("Major/Minor Honors Course", 1, new LinkedList<>(Arrays.asList("Did you complete a 3 credit hour Honors course in your declared Major or Minor with a grade of B- or better?"))));
+
+        sampleRequirements.add(courseworkRequirement);
+
 
         Requirement workshopsRequirement = new Requirement("Workshops", 2, new LinkedList<String>());
         workshopsRequirement.addComponent(new Requirement("Honors Undergraduate Research Workshop", 1, new LinkedList<>(Arrays.asList("Have you attended an Undergraduate Research Workshop?"))));
