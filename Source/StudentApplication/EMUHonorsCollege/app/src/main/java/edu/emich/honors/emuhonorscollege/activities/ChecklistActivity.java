@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ public class ChecklistActivity extends ActionBarActivity {
     private String mActivityTitle;
     private String completedGreen = "#669900";
     private String inProgressYellow = "#FFBB33";
+    private int indentationSize = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,27 +65,7 @@ public class ChecklistActivity extends ActionBarActivity {
         LinearLayout parentLayout = (LinearLayout) findViewById(R.id.checklist_linear_layout);
 
 //        Placeholder for a real list of requirements pulled from the DB
-        ArrayList<Requirement> tempListOfRequirements = new ArrayList<>();
-        for (int i = 0; i < 8; i++)
-        {
-            LinkedList<String> dummyCoachingSteps = new LinkedList<String>();
-            dummyCoachingSteps.add("Did you put your left foot in?");
-            dummyCoachingSteps.add("Did you put your left foot out?");
-            dummyCoachingSteps.add("Did you put your left foot in and shake it all about?");
-
-            Requirement tempComponent = new Requirement("Requirement " + i, 3 , dummyCoachingSteps);
-            if (i % 2 == 0)
-            {
-                tempComponent.setNumberOfCompleted(3);
-            }
-            else
-            {
-                tempComponent.addComponent(new Requirement());
-            }
-            tempListOfRequirements.add(tempComponent);
-        }
-
-        RequirementsList requirementsList = new RequirementsList(HandbookYear.YEAR_2014, HonorsType.UNIVERSITY, tempListOfRequirements);
+        RequirementsList requirementsList = RequirementsList.getSampleRequirementsList();
 
         TextView honorsTypeTitle = new TextView(this);
         honorsTypeTitle.setText(requirementsList.getHonorsType().toString());
@@ -93,98 +75,130 @@ public class ChecklistActivity extends ActionBarActivity {
 
         parentLayout.addView(honorsTypeTitle);
 
-        buildCheckList(tempListOfRequirements, parentLayout);
+        buildCheckList(requirementsList.getRequirements(), parentLayout);
     }
+
+
 
     public void buildCheckList(ArrayList<Requirement> listOfRequirements, LinearLayout parentLayout)
     {
         for (final Requirement requirement : listOfRequirements)
         {
-            LinearLayout requirementRow = new LinearLayout(this);
-            requirementRow.setOrientation(LinearLayout.HORIZONTAL);
-            requirementRow.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            buildRequirementRow(requirement, parentLayout);
+        }
+    }
 
-            CheckBox requirementCheckbox = new CheckBox(this);
-            requirementCheckbox.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onCheck((CheckBox) v, requirement);
+    private void buildRequirementRow(final Requirement requirement, LinearLayout parentLayout) {
+        LinearLayout requirementRow = new LinearLayout(this);
+        requirementRow.setOrientation(LinearLayout.HORIZONTAL);
+        requirementRow.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        if (requirement.getHierarchyLevel() == 0)
+        {
+
+        }
+        else {
+            for (int numberOfPaddingBlocks = 0; numberOfPaddingBlocks < requirement.getHierarchyLevel(); numberOfPaddingBlocks++) {
+                Space space = new Space(this);
+                space.setMinimumWidth(100);
+                requirementRow.addView(space);
+            }
+        }
+
+        CheckBox requirementCheckbox = new CheckBox(this);
+        requirementCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onCheck((CheckBox) v, requirement);
+            }
+        });
+        requirementCheckbox.setChecked(requirement.isCompleted());
+        requirementCheckbox.setLayoutParams(new ActionBar.LayoutParams(75, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER));
+        requirementCheckbox.setHeight(ActionBar.LayoutParams.MATCH_PARENT);
+        requirementRow.addView(requirementCheckbox);
+
+
+        final ImageView dropDownArrow = new ImageView(this);
+        dropDownArrow.setImageResource(R.drawable.arrow_dropdown);
+        dropDownArrow.setLayoutParams(new ActionBar.LayoutParams(125, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER));
+        dropDownArrow.setPadding(25, 0, 25, 0);
+        dropDownArrow.setRotation(-90);
+        dropDownArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (dropDownArrow.getRotation() == -90)
+                {
+                    dropDownArrow.setRotation(0);
                 }
-            });
-            requirementCheckbox.setChecked(requirement.isCompleted());
-            requirementCheckbox.setLayoutParams(new ActionBar.LayoutParams(75, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER));
-            requirementCheckbox.setHeight(ActionBar.LayoutParams.MATCH_PARENT);
-            requirementRow.addView(requirementCheckbox);
-
-
-            final ImageView dropDownArrow = new ImageView(this);
-            dropDownArrow.setImageResource(R.drawable.arrow_dropdown);
-            dropDownArrow.setLayoutParams(new ActionBar.LayoutParams(125, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER));
-            dropDownArrow.setPadding(25, 0, 25, 0);
-            dropDownArrow.setRotation(-90);
-            dropDownArrow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (dropDownArrow.getRotation() == -90)
-                    {
-                        dropDownArrow.setRotation(0);
-                    }
-                    else
-                    {
-                        dropDownArrow.setRotation(-90);
-                    }
-                    Toast.makeText(getApplicationContext(), "Drop down!", Toast.LENGTH_SHORT).show();
+                else
+                {
+                    dropDownArrow.setRotation(-90);
                 }
-            });
-
-            if (requirement.hasComponent())
-            {
-                dropDownArrow.setVisibility(View.VISIBLE);
+                Toast.makeText(getApplicationContext(), "Drop down!", Toast.LENGTH_SHORT).show();
             }
-            else
-            {
-                dropDownArrow.setVisibility(View.INVISIBLE);
+        });
+
+        if (requirement.hasComponent())
+        {
+            dropDownArrow.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            dropDownArrow.setVisibility(View.INVISIBLE);
+        }
+        requirementRow.addView(dropDownArrow);
+
+        TextView requirementTitle = new TextView(this);
+        requirementTitle.setText(requirement.getName());
+
+
+        if (requirement.getHierarchyLevel() == 0)  // Heading Requirement
+        {
+            requirementTitle.setTextSize(26);
+        }
+        else {  // Component
+            requirementTitle.setTextSize(18);
+        }
+
+        if (requirement.isCompleted())
+        {
+            requirementTitle.setTextColor(Color.parseColor(completedGreen));
+        }
+        else if (requirement.isInProgress())
+        {
+            requirementTitle.setTextColor(Color.parseColor(inProgressYellow));
+        }
+        else
+        {
+            requirementTitle.setTextColor(Color.BLACK);
+        }
+
+        final AlertDialog.Builder descriptionDialogBuilder = new AlertDialog.Builder(this);
+        descriptionDialogBuilder.setTitle(requirement.getName());
+        descriptionDialogBuilder.setMessage(requirement.getDescription());
+
+        descriptionDialogBuilder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
             }
-            requirementRow.addView(dropDownArrow);
+        });
 
-            TextView requirementTitle = new TextView(this);
-            requirementTitle.setText(requirement.getName());
-            requirementTitle.setTextSize(34);
-            if (requirement.isCompleted())
-            {
-                requirementTitle.setTextColor(Color.parseColor(completedGreen));
+        requirementTitle.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                descriptionDialogBuilder.show();
+                return false;
             }
-            else if (requirement.isInProgress())
-            {
-                requirementTitle.setTextColor(Color.parseColor(inProgressYellow));
-            }
-            else
-            {
-                requirementTitle.setTextColor(Color.BLACK);
-            }
+        });
 
-            final AlertDialog.Builder descriptionDialogBuilder = new AlertDialog.Builder(this);
-            descriptionDialogBuilder.setTitle(requirement.getName());
-            descriptionDialogBuilder.setMessage(requirement.getDescription());
+        requirementRow.addView(requirementTitle);
 
-            descriptionDialogBuilder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+        parentLayout.addView(requirementRow);
 
-                }
-            });
-
-            requirementTitle.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    descriptionDialogBuilder.show();
-                    return false;
-                }
-            });
-
-            requirementRow.addView(requirementTitle);
-
-            parentLayout.addView(requirementRow);
+        for (Requirement component : requirement.getComponents())
+        {
+            buildRequirementRow(component, parentLayout);
         }
     }
 
@@ -286,6 +300,8 @@ public class ChecklistActivity extends ActionBarActivity {
                         ((TextView) view).setTextColor(Color.parseColor(completedGreen));
                     }
                 }
+
+
 
                 // Write to Database Here
             }

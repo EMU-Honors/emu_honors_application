@@ -14,6 +14,7 @@ public class Requirement{
     private LinkedList<String> coachingSteps;
     private LinkedList<String> persistentCoachingSteps;
     private boolean isInProgress = false;
+    private Requirement parentRequirement;
 
     public Requirement() {
         this.name = "";
@@ -22,9 +23,10 @@ public class Requirement{
         this.completed = false;
         this.numberOfCompleted = 0;
         this.numberRequiredForCompletion = 1;
-        this.hierarchyLevel = 1;
+        this.hierarchyLevel = 0;
         this.coachingSteps = new LinkedList<>();
         this.persistentCoachingSteps = new LinkedList<>();
+        this.parentRequirement = null;
     }
 
     public Requirement(String requirementName,
@@ -69,13 +71,29 @@ public class Requirement{
     }
 
     public boolean isCompleted() {
-        return completed;
+        boolean isCompleteFlag = true;
+
+        for (Requirement component : components)
+        {
+            if (!component.isCompleted())
+            {
+                isCompleteFlag = false;
+                break;
+            }
+        }
+
+        return isCompleteFlag;
     }
 
     public void addComponent(Requirement componentToAdd)
     {
+        componentToAdd.setParentRequirement(this);
         componentToAdd.hierarchyLevel++;
         components.add(componentToAdd);
+    }
+
+    private void setParentRequirement(Requirement parentRequirement) {
+        this.parentRequirement = parentRequirement;
     }
 
     public LinkedList<String> getCoachingSteps() {
@@ -88,7 +106,27 @@ public class Requirement{
     }
 
     public boolean isInProgress() {
-        return isInProgress;
+        boolean isInProgressFlag = true;
+
+        for (Requirement component : components)
+        {
+            if (!component.isCompleted())
+            {
+                isInProgressFlag = false;
+                break;
+            }
+        }
+        return isInProgressFlag;
+    }
+
+    public boolean hasParentRequirement()
+    {
+        return parentRequirement != null;
+    }
+
+    public Requirement getParentRequirement()
+    {
+        return parentRequirement;
     }
 
     public void setInProgress(boolean isInProgress) {
