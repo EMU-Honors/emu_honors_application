@@ -15,7 +15,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import edu.emich.honors.emuhonorscollege.HonorsApplication;
 import edu.emich.honors.emuhonorscollege.R;
+import edu.emich.honors.emuhonorscollege.datatypes.User;
 
 
 public class LoginActivity extends ActionBarActivity {
@@ -72,6 +74,7 @@ public class LoginActivity extends ActionBarActivity {
 
     public void submitLoginCredentials(View view)
     {
+        ((HonorsApplication) this.getApplication()).setCurrentUser(User.getSampleUser());
         startActivity(new Intent(this, ChecklistActivity.class));
     }
 

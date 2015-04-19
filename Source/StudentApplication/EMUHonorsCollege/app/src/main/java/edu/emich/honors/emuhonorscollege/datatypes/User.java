@@ -1,26 +1,31 @@
 package edu.emich.honors.emuhonorscollege.datatypes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import edu.emich.honors.emuhonorscollege.datatypes.enums.GraduationTerm;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
-public class User {
+public class User implements Serializable{
 
     private String email;
     private char[] password;
     private String firstName;
     private String lastName;
+    private HonorsHandbook handbook;
     private ArrayList<HonorsType> honorsTypes;
     private String eID;
     private FieldOfStudy fieldOfStudy;
     private GraduationDate graduationDate;
 
 
-    public User(String email, char[] password, String firstName, String lastName, ArrayList<HonorsType> honorsTypes, String eID, FieldOfStudy fieldOfStudy, GraduationDate graduationDate) {
+    public User(String email, char[] password, String firstName, String lastName, HonorsHandbook handbook, ArrayList<HonorsType> honorsTypes, String eID, FieldOfStudy fieldOfStudy, GraduationDate graduationDate) {
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.handbook = handbook;
         this.honorsTypes = honorsTypes;
         this.eID = eID;
         this.fieldOfStudy = fieldOfStudy;
@@ -75,5 +80,20 @@ public class User {
 
     public void setGraduationDate(GraduationDate graduationDate) {
         this.graduationDate = graduationDate;
+    }
+
+    public HonorsHandbook getHandbook() {
+        return handbook;
+    }
+
+    public void setHandbook(HonorsHandbook handbook) {
+        this.handbook = handbook;
+    }
+
+    public static User getSampleUser()
+    {
+        ArrayList<HonorsType> sampleHonorsType = new ArrayList<>(Arrays.asList(HonorsType.DEPARTMENTAL));
+        User sampleUser = new User("jsmith@emich.edu", "password".toCharArray(), "John", "Smith", HonorsHandbook.getSampleHandbook(), sampleHonorsType, "E03487695", null, new GraduationDate(GraduationTerm.FALL, "2018"));
+        return sampleUser;
     }
 }

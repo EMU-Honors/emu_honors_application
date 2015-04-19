@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.PersistableBundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.ActionBarActivity;
@@ -27,9 +28,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import edu.emich.honors.emuhonorscollege.HonorsApplication;
 import edu.emich.honors.emuhonorscollege.R;
 import edu.emich.honors.emuhonorscollege.datatypes.Requirement;
 import edu.emich.honors.emuhonorscollege.datatypes.RequirementsList;
+import edu.emich.honors.emuhonorscollege.datatypes.User;
+import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
 public class ChecklistActivity extends ActionBarActivity {
 
@@ -43,11 +47,26 @@ public class ChecklistActivity extends ActionBarActivity {
     private int indentationSize = 100;
     private final int COLLAPSED = -90;
     private final int EXPANDED = 0;
+    private User user;
+    private RequirementsList currentRequirementsList;
+    private HonorsType requirementsListToShow = HonorsType.DEPARTMENTAL;  // Should be set by checklist selection
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checklist);
+
+        if (savedInstanceState != null)
+        {
+            user = ((User) savedInstanceState.getSerializable("User"));
+
+        }
+        else
+        {
+            user = ((HonorsApplication) this.getApplication()).getCurrentUser();
+        }
+
+        currentRequirementsList = user.getHandbook().getRequirementsList(requirementsListToShow);
 
 //        Menu Setup
         mDrawerList = (ListView)findViewById(R.id.navList);
@@ -64,21 +83,23 @@ public class ChecklistActivity extends ActionBarActivity {
 //        Checklist Setup
         LinearLayout parentLayout = (LinearLayout) findViewById(R.id.checklist_linear_layout);
 
-//        Placeholder for a real list of requirements pulled from the DB
-        RequirementsList requirementsList = RequirementsList.getSampleRequirementsList();
 
         TextView honorsTypeTitle = new TextView(this);
-        honorsTypeTitle.setText(requirementsList.getHonorsType().toString());
+        honorsTypeTitle.setText(currentRequirementsList.getHonorsType().toString());
         honorsTypeTitle.setTextSize(40);
         honorsTypeTitle.setGravity(Gravity.CENTER_HORIZONTAL);
         honorsTypeTitle.setTextColor(Color.BLACK);
 
         parentLayout.addView(honorsTypeTitle);
 
-        buildCheckList(requirementsList.getRequirements(), parentLayout);
+        buildCheckList(currentRequirementsList.getRequirements(), parentLayout);
     }
 
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable("User", user);
+        super.onSaveInstanceState(outState);
+    }
 
     public void buildCheckList(ArrayList<Requirement> listOfRequirements, LinearLayout parentLayout)
     {
@@ -288,6 +309,9 @@ public class ChecklistActivity extends ActionBarActivity {
 
             markRequirementIncompleteAlert.show();
         }
+
+        currentRequirementsList.updateRequirement(requirement);
+
     }
 
     private class CoachingStepPositiveListener implements DialogInterface.OnClickListener

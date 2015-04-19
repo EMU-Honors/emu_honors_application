@@ -59,7 +59,7 @@ public class SettingsActivity extends ActionBarActivity {
     FieldOfStudy fOfStudyTest = new FieldOfStudy(aMajorTest, aMinorTest);
 
     char pasTest[];
-    private User currentUser = new User("ttaylo@emich",pasTest , "travis", "taylor", hTypeTest, "009234", fOfStudyTest, gradTest);
+    private User currentUser = User.getSampleUser();
 
 
     @Override

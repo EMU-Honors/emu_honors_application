@@ -1,6 +1,7 @@
 package edu.emich.honors.emuhonorscollege.datatypes;
 
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HandbookYear;
+import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
 public class HonorsHandbook {
     HandbookYear handbookYear;
@@ -34,4 +35,31 @@ public class HonorsHandbook {
     public RequirementsList getHighestHonorsRequirements() {
         return highestHonorsRequirements;
     }
+
+    public static HonorsHandbook getSampleHandbook()
+    {
+        HonorsHandbook sampleHandbook = new HonorsHandbook(HandbookYear.YEAR_2014, RequirementsList.getSampleRequirementsList(), null, null);
+        return sampleHandbook;
+    }
+
+    public RequirementsList getRequirementsList(HonorsType honorsType)
+    {
+        RequirementsList requirementsListToReturn = null;
+
+        if (honorsType == HonorsType.UNIVERSITY)
+        {
+            requirementsListToReturn = getUniversityHonorsRequirements();
+        }
+        else if (honorsType == HonorsType.DEPARTMENTAL)
+        {
+            requirementsListToReturn = getDepartmentalHonorsRequirements();
+        }
+        else if (honorsType == HonorsType.HIGHEST)
+        {
+            requirementsListToReturn = getHighestHonorsRequirements();
+        }
+
+        return requirementsListToReturn;
+    }
+
 }

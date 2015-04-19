@@ -75,4 +75,35 @@ public class RequirementsList {
         return new RequirementsList(HandbookYear.YEAR_2014, HonorsType.DEPARTMENTAL, sampleRequirements);
     }
 
+    public Requirement findRequirementByName(String requirementNameToFind)
+    {
+        Requirement primaryRequirement = null;
+        Requirement component = null;
+
+        for (int primaryRequirementIndex = 0; primaryRequirementIndex < requirements.size(); primaryRequirementIndex++)
+        {
+            primaryRequirement = requirements.get(primaryRequirementIndex);
+
+            for (int componentIndex = 0; componentIndex < primaryRequirement.getComponents().size(); componentIndex++)
+            {
+                component = primaryRequirement.getComponents().get(componentIndex);
+
+                if (component.getName().equals(requirementNameToFind))
+                {
+                    return component;
+                }
+            }
+        }
+
+        return component;
+    }
+
+
+    public void updateRequirement(Requirement newRequirement)
+    {
+        Requirement oldRequirement = findRequirementByName(newRequirement.getName());
+
+        oldRequirement = newRequirement;
+    }
+
 }

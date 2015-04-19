@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import edu.emich.honors.emuhonorscollege.R;
 import edu.emich.honors.emuhonorscollege.datatypes.FieldOfStudy;
 import edu.emich.honors.emuhonorscollege.datatypes.GraduationDate;
+import edu.emich.honors.emuhonorscollege.datatypes.HonorsHandbook;
 import edu.emich.honors.emuhonorscollege.datatypes.User;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.AcademicProgram;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.GraduationTerm;
@@ -109,8 +110,7 @@ public class NewUserActivity extends ActionBarActivity {
             Log.println(Log.DEBUG, "New User Guardrail", e.getMessage());
         }
 
-        User newUser = new User(email, password, firstName, lastName, honorsTypes, eID, fieldOfStudy, graduationDate);
-
+        User newUser = new User(email, password, firstName, lastName, HonorsHandbook.getSampleHandbook(), honorsTypes, eID, fieldOfStudy, graduationDate);
 
         //Show attributes of the newly created User
         String honorsTypesString = "";
