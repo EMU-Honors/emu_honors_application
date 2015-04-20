@@ -1,12 +1,10 @@
 <?php
 session_start();
 
-if ($_SESSION['logged_in'] != 'admin') {
-  header('Location: ' . 'index.php');
-  die();
-}
 
-$thisPage="update";
+include_once 'connection.php';
+
+$thisPage="create";
 ?>
 <!doctype html>
 <html>
@@ -71,11 +69,51 @@ $thisPage="update";
     <div id="container">
     <?php include 'header.html'?>
       <form action="" method="post">
-        <p>Year: <?="2007"?></p>
+        <p>Year: <input type="number" min="2007" value="2007" /></p>
+        <table style="width:80%;margin:auto;">
+          <tr>
+            <th></th>
+            <th>Name:</th>
+            <th>Description:</th>
+            <th>University</th>
+            <th>Departmental</th>
+            <th>Highest</th>
+          </tr>
+          <tr>
+            <td><input type="button" value="addStep"></td>
+            <td><input></td>
+            <td><input></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+            <td><input type="checkbox"></td>
+          </tr>
+        </table>
         <div id="requirements"></div>
         <p>
           <button type="button" onclick="addNewRequirement();">Add new requirement</button>
-          <button>Update Requirement Catalogue</button>
+          <select>
+          <?php
+          echo 'here';
+          $db = open_connection();
+          echo 'gah';
+          $sql = "SELECT CONCAT(handbook_year, ' ', honors_type) as hb
+                  FROM step_to_complete;";
+          $stmt = $db->prepare($sql);
+          echo 'hi';
+
+          $stmt->execute();
+
+          echo 'boob';
+          while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            ?>
+            <option><?=$result['hb']?></option>
+            <?php
+          }
+
+          ?>
+          </select>
+          <button type="button" >Load Previous Year</button>
+          <button>Submit new Requirement Catalogue</button>
         </p>
       </form>
       <div id="footer"></div>

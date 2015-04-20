@@ -6,12 +6,72 @@
     padding: 0;
     text-align: center;
     width: 940px;
+    background-color: #FFFFFF;
+    height: 100%;
+    position: relative;
 }
 
-body {
+html, body {
     background-color: #e1e1e1;
+    height: 100%;
+}
+
+#footer {
+	position: absolute; 
+	bottom: 0;
 }
 
 #requirements {
   text-align: left;
+}
+
+#navBar {
+	text-align: center;
+	background-color: #037551;
+}
+#navBar ul {
+	display: inline-block;
+	list-style-type: none;
+	text-align: center;
+	margin: 0 auto;
+}
+
+#navBar ul li {
+	display: inline;
+}
+
+.navBarLink:Link, .navBarLink:visited, #logoutLink{
+	text-decoration: none;
+	background-color: #037551;
+	color: #FFFFFF;
+}
+
+.navBarLink:Link, .navBar:visited {
+	font: 14px "Lucida Grande",Verdana,Arial,Helvetica,sans-serif;
+	float: left;
+    margin:auto;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    padding-left: 15px;
+    padding-right:15px;
+}
+
+#logoutLink {
+	float: right;
+}
+
+.navBarLink:hover, #logoutLink:hover {
+	color:#66FF33;
+}
+
+#navBar #currentpage .navBarLink {
+	color:#66FF33 !important;
+}
+
+#logoutLink:Link, #logoutLink:visited {
+	font: 12px "Lucida Grande",Verdana,Arial,Helvetica,sans-serif;
+	color: #FFFFFF;
+	padding-bottom: 5px;
+	padding-top: 2px;
+	padding-right:2px;
 }

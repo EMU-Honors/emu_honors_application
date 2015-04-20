@@ -1,0 +1,14 @@
+<img alt="" src="header.png">
+<div id="navBar">
+	<ul>
+		<li <?php if ($thisPage=="home") echo " id=\"currentpage\""; ?>>
+					<a href="index.php" class="navBarLink">Home</a></li>
+		<li <?php if ($thisPage=="create") echo " id=\"currentpage\""; ?>>
+					<a href="create_reqs.php" class="navBarLink">Create Requirements</a></li>
+		<li <?php if ($thisPage=="update") echo " id=\"currentpage\""; ?>>
+					<a href="update_reqs.php" class="navBarLink">Update Requirements</a></li>
+		<li <?php if ($thisPage=="stats") echo " id=\"currentpage\""; ?>>
+					<a href="stats.php" class="navBarLink">View Statistics</a></li>
+	</ul>
+	<a href="logout.php" id="logoutLink">Logout</a>
+</div>
