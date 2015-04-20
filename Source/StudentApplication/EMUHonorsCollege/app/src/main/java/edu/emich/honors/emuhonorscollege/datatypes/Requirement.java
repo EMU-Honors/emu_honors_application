@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Requirement implements Serializable {
-    private  String name;
-    private  String description;
+    private String name;
+    private String description;
     private ArrayList<Requirement> components;
     private boolean completed;
     private int numberOfCompleted;
-    private  int numberRequiredForCompletion;
+    private int numberRequiredForCompletion;
     private int hierarchyLevel;
     private LinkedList<String> coachingSteps;
     private LinkedList<String> persistentCoachingSteps;
@@ -32,8 +32,7 @@ public class Requirement implements Serializable {
 
     public Requirement(String requirementName,
                        int numberRequiredForCompletion,
-                       LinkedList<String> coachingSteps)
-    {
+                       LinkedList<String> coachingSteps) {
         this();
         this.name = requirementName;
         this.numberRequiredForCompletion = numberRequiredForCompletion;
@@ -62,8 +61,7 @@ public class Requirement implements Serializable {
         return numberRequiredForCompletion;
     }
 
-    public boolean hasComponent()
-    {
+    public boolean hasComponent() {
         return !this.getComponents().isEmpty();
     }
 
@@ -74,33 +72,31 @@ public class Requirement implements Serializable {
     public boolean isCompleted() {
         boolean isCompleteFlag = true;
 
-        if (this.hasComponent()){
-            for (Requirement component : components)
-            {
-                if (!component.isCompleted())
-                {
+        if (this.hasComponent()) {
+            for (Requirement component : components) {
+                if (!component.isCompleted()) {
                     isCompleteFlag = false;
                     break;
                 }
             }
-        }
-        else
-        {
+        } else {
             isCompleteFlag = completed;
         }
 
         return isCompleteFlag;
     }
 
-    public void addComponent(Requirement componentToAdd)
-    {
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+        if (this.hasParentRequirement()) {
+            this.getParentRequirement().isInProgress();
+        }
+    }
+
+    public void addComponent(Requirement componentToAdd) {
         componentToAdd.setParentRequirement(this);
         componentToAdd.hierarchyLevel++;
         components.add(componentToAdd);
-    }
-
-    private void setParentRequirement(Requirement parentRequirement) {
-        this.parentRequirement = parentRequirement;
     }
 
     public LinkedList<String> getCoachingSteps() {
@@ -128,35 +124,27 @@ public class Requirement implements Serializable {
 
     }
 
-    public boolean hasParentRequirement()
-    {
-        return parentRequirement != null;
-    }
-
-    public Requirement getParentRequirement()
-    {
-        return parentRequirement;
-    }
-
     public void setInProgress(boolean isInProgress) {
         this.isInProgress = isInProgress;
     }
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-        if (this.hasParentRequirement())
-        {
-            this.getParentRequirement().isInProgress();
-        }
+    public boolean hasParentRequirement() {
+        return parentRequirement != null;
     }
 
-    public void resetCoachingSteps()
-    {
+    public Requirement getParentRequirement() {
+        return parentRequirement;
+    }
+
+    private void setParentRequirement(Requirement parentRequirement) {
+        this.parentRequirement = parentRequirement;
+    }
+
+    public void resetCoachingSteps() {
         this.coachingSteps = new LinkedList<>(persistentCoachingSteps);
     }
 
-    public void resetProgress()
-    {
+    public void resetProgress() {
         this.completed = false;
         this.isInProgress = false;
         this.numberOfCompleted = 0;

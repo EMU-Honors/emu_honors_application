@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HandbookYear;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
-public class RequirementsList  implements Serializable {
+public class RequirementsList implements Serializable {
     private final HandbookYear handbookYear;
     private final HonorsType honorsType;
     private final ArrayList<Requirement> requirements;
@@ -19,35 +19,7 @@ public class RequirementsList  implements Serializable {
         this.requirements = requirements;
     }
 
-    public HandbookYear getHandbookYear() {
-        return handbookYear;
-    }
-
-    public HonorsType getHonorsType() {
-        return honorsType;
-    }
-
-    public boolean isComplete() {
-        boolean isCompleteFlag = true;
-
-        for (Requirement requirement : requirements)
-        {
-            if (!requirement.isCompleted())
-            {
-                isCompleteFlag = false;
-                break;
-            }
-        }
-        return isCompleteFlag;
-    }
-
-    public ArrayList<Requirement> getRequirements() {
-        return requirements;
-    }
-
-
-    public static RequirementsList getSampleRequirementsList()
-    {
+    public static RequirementsList getSampleRequirementsList() {
         ArrayList<Requirement> sampleRequirements = new ArrayList<>();
 
         Requirement courseworkRequirement = new Requirement("Coursework", 12, new LinkedList<String>());
@@ -76,21 +48,41 @@ public class RequirementsList  implements Serializable {
         return new RequirementsList(HandbookYear.YEAR_2014, HonorsType.DEPARTMENTAL, sampleRequirements);
     }
 
-    public Requirement findRequirementByName(String requirementNameToFind)
-    {
+    public HandbookYear getHandbookYear() {
+        return handbookYear;
+    }
+
+    public HonorsType getHonorsType() {
+        return honorsType;
+    }
+
+    public boolean isComplete() {
+        boolean isCompleteFlag = true;
+
+        for (Requirement requirement : requirements) {
+            if (!requirement.isCompleted()) {
+                isCompleteFlag = false;
+                break;
+            }
+        }
+        return isCompleteFlag;
+    }
+
+    public ArrayList<Requirement> getRequirements() {
+        return requirements;
+    }
+
+    public Requirement findRequirementByName(String requirementNameToFind) {
         Requirement primaryRequirement = null;
         Requirement component = null;
 
-        for (int primaryRequirementIndex = 0; primaryRequirementIndex < requirements.size(); primaryRequirementIndex++)
-        {
+        for (int primaryRequirementIndex = 0; primaryRequirementIndex < requirements.size(); primaryRequirementIndex++) {
             primaryRequirement = requirements.get(primaryRequirementIndex);
 
-            for (int componentIndex = 0; componentIndex < primaryRequirement.getComponents().size(); componentIndex++)
-            {
+            for (int componentIndex = 0; componentIndex < primaryRequirement.getComponents().size(); componentIndex++) {
                 component = primaryRequirement.getComponents().get(componentIndex);
 
-                if (component.getName().equals(requirementNameToFind))
-                {
+                if (component.getName().equals(requirementNameToFind)) {
                     return component;
                 }
             }
@@ -100,8 +92,7 @@ public class RequirementsList  implements Serializable {
     }
 
 
-    public void updateRequirement(Requirement newRequirement)
-    {
+    public void updateRequirement(Requirement newRequirement) {
         Requirement oldRequirement = findRequirementByName(newRequirement.getName());
 
         oldRequirement = newRequirement;

@@ -2,17 +2,16 @@ package edu.emich.honors.emuhonorscollege.activities;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,8 +45,8 @@ public class LoginActivity extends ActionBarActivity {
 
         newUserButton = (Button) findViewById(R.id.login_new_user);
         submitButton = (Button) findViewById(R.id.login_submit);
-        mDrawerList = (ListView)findViewById(R.id.navList);
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
 
         this.userNameField = (TextView) findViewById(R.id.login_email);
@@ -80,13 +79,11 @@ public class LoginActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void goToNewUserPage(View view)
-    {
+    public void goToNewUserPage(View view) {
         startActivity(new Intent(this, NewUserActivity.class));
     }
 
-    public void submitLoginCredentials(View view)
-    {
+    public void submitLoginCredentials(View view) {
         DB_Handler instance = DB_Handler.getInstance(this);
         JSONObject login = instance.login(this.userNameField.getText().toString(), this.userPassField.getText().toString());
         String response = "fail";
@@ -99,6 +96,7 @@ public class LoginActivity extends ActionBarActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         if (response.equals("success")) {
             ((HonorsApplication) this.getApplication()).setCurrentUser(User.getSampleUser());
             startActivity(new Intent(this, ChecklistActivity.class));
@@ -109,7 +107,7 @@ public class LoginActivity extends ActionBarActivity {
     }
 
     private void addDrawerItems() {
-        String[] osArray = { "Settings", "Checklist" };
+        String[] osArray = {"Settings", "Checklist"};
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
 
@@ -117,7 +115,7 @@ public class LoginActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                switch(position) {
+                switch (position) {
                     case 0:
                         Intent a = new Intent(LoginActivity.this, SettingsActivity.class);
                         startActivity(a);

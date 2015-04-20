@@ -24,13 +24,13 @@ public enum HandbookYear {
     YEAR_2027("2027-2028"),
     YEAR_2028("2028-2029"),
     YEAR_2029("2029-2030");
-    
+
     private String handbookName;
 
-    private HandbookYear(String s)
-    {
+    private HandbookYear(String s) {
         handbookName = s;
     }
+
     @Override
     public String toString() {
         return handbookName;

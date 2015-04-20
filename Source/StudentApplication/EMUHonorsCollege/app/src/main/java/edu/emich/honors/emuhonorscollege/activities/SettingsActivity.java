@@ -4,20 +4,19 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -34,6 +33,13 @@ import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
 public class SettingsActivity extends ActionBarActivity {
 
+    //dummy data variables
+    ArrayList<HonorsType> hTypeTest = new ArrayList<>();
+    ArrayList<AcademicProgram> aMajorTest = new ArrayList<>();
+    ArrayList<AcademicProgram> aMinorTest = new ArrayList<>();
+    FieldOfStudy fOfStudyTest = new FieldOfStudy(aMajorTest, aMinorTest);
+    GraduationDate gradTest = new GraduationDate(GraduationTerm.FALL, "2015");
+    char pasTest[];
     private Button submitButton;
     private EditText oldPasswordEditText;
     private EditText newPasswordEditText;
@@ -49,16 +55,6 @@ public class SettingsActivity extends ActionBarActivity {
     private ArrayAdapter<String> mAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
-
-    //dummy data variables
-    ArrayList<HonorsType> hTypeTest = new ArrayList<>();
-    ArrayList<AcademicProgram> aMajorTest = new ArrayList<>();
-    ArrayList<AcademicProgram> aMinorTest = new ArrayList<>();
-
-    GraduationDate gradTest = new GraduationDate(GraduationTerm.FALL, "2015");
-    FieldOfStudy fOfStudyTest = new FieldOfStudy(aMajorTest, aMinorTest);
-
-    char pasTest[];
     private User currentUser = User.getSampleUser();
 
 
@@ -96,20 +92,19 @@ public class SettingsActivity extends ActionBarActivity {
         currentUser.setGraduationDate(gradTest);
 
 
-
         //setting checkboxes
         ArrayList<HonorsType> honorsCheck = currentUser.getHonorsTypes();
-        for(int i=0; i<honorsCheck.size(); i++){
-            if(honorsCheck.get(i) == HonorsType.DEPARTMENTAL)
+        for (int i = 0; i < honorsCheck.size(); i++) {
+            if (honorsCheck.get(i) == HonorsType.DEPARTMENTAL)
                 departmentalHonorsCheckBox.setChecked(true);
 
-            if(honorsCheck.get(i) == HonorsType.UNIVERSITY)
+            if (honorsCheck.get(i) == HonorsType.UNIVERSITY)
                 universityHonorsCheckBox.setChecked(true);
 
-            if(honorsCheck.get(i) == HonorsType.HIGHEST)
+            if (honorsCheck.get(i) == HonorsType.HIGHEST)
                 highestHonorsCheckBox.setChecked(true);
 
-            if(honorsCheck.get(i) == HonorsType.FULL)
+            if (honorsCheck.get(i) == HonorsType.FULL)
                 fullHonorsCheckBox.setChecked(true);
         }
 
@@ -118,7 +113,8 @@ public class SettingsActivity extends ActionBarActivity {
         minorSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.spinner_template, AcademicProgram.values()));
 
         /* navigation drawer settings */
-        mDrawerList = (ListView)findViewById(R.id.navList);mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
 
         addDrawerItems();
@@ -135,8 +131,8 @@ public class SettingsActivity extends ActionBarActivity {
         String confirmPass = currentUser.getPassword().toString();
 
 
-        if(oldPassword.equals(confirmPass))
-           currentUser.setPassword(newPassword);
+        if (oldPassword.equals(confirmPass))
+            currentUser.setPassword(newPassword);
 
 
         FieldOfStudy fieldOfStudy = buildFieldOfStudy();
@@ -145,12 +141,9 @@ public class SettingsActivity extends ActionBarActivity {
 
         ArrayList<HonorsType> honorsTypes = null;
 
-        try
-        {
+        try {
             honorsTypes = buildHonorsTypes();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.println(Log.DEBUG, "New User Guardrail", e.getMessage());
         }
 
@@ -159,8 +152,7 @@ public class SettingsActivity extends ActionBarActivity {
         //Show attributes of the newly created User
         String honorsTypesString = "";
 
-        for (HonorsType type : currentUser.getHonorsTypes())
-        {
+        for (HonorsType type : currentUser.getHonorsTypes()) {
             honorsTypesString += type.toString() + "\n";
         }
 
@@ -189,37 +181,30 @@ public class SettingsActivity extends ActionBarActivity {
         newUserSummaryDialog.show();
     }
 
-    private FieldOfStudy buildFieldOfStudy()
-    {
+    private FieldOfStudy buildFieldOfStudy() {
         AcademicProgram major = (AcademicProgram) majorSpinner.getSelectedItem();
         AcademicProgram minor = (AcademicProgram) minorSpinner.getSelectedItem();
 
         return new FieldOfStudy(major, minor);
     }
 
-    private ArrayList<HonorsType> buildHonorsTypes() throws Exception
-    {
+    private ArrayList<HonorsType> buildHonorsTypes() throws Exception {
         ArrayList<HonorsType> newUserHonorsTypes = new ArrayList<>();
 
-        if (departmentalHonorsCheckBox.isChecked())
-        {
+        if (departmentalHonorsCheckBox.isChecked()) {
             newUserHonorsTypes.add(HonorsType.DEPARTMENTAL);
         }
-        if (universityHonorsCheckBox.isChecked())
-        {
+        if (universityHonorsCheckBox.isChecked()) {
             newUserHonorsTypes.add(HonorsType.UNIVERSITY);
         }
-        if (highestHonorsCheckBox.isChecked())
-        {
+        if (highestHonorsCheckBox.isChecked()) {
             newUserHonorsTypes.add(HonorsType.HIGHEST);
         }
-        if (fullHonorsCheckBox.isChecked())
-        {
+        if (fullHonorsCheckBox.isChecked()) {
             newUserHonorsTypes.add(HonorsType.FULL);
         }
 
-        if (newUserHonorsTypes.isEmpty())
-        {
+        if (newUserHonorsTypes.isEmpty()) {
             throw new Exception("No Honors Type selected.");
         }
 
@@ -256,7 +241,7 @@ public class SettingsActivity extends ActionBarActivity {
     }
 
     private void addDrawerItems() {
-        String[] osArray = { "Checklist", "Back to Login" };
+        String[] osArray = {"Checklist", "Back to Login"};
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
 
@@ -264,7 +249,7 @@ public class SettingsActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Toast.makeText(SettingsActivity.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
-                switch(position) {
+                switch (position) {
                     case 0:
                         Intent a = new Intent(SettingsActivity.this, ChecklistActivity.class);
                         startActivity(a);

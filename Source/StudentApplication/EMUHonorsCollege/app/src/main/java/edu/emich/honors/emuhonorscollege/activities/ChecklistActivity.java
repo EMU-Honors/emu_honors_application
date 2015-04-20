@@ -1,24 +1,23 @@
 package edu.emich.honors.emuhonorscollege.activities;
 
 import android.app.ActionBar;
-import android.content.Intent;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.os.PersistableBundle;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.widget.CheckBox;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -37,16 +36,16 @@ import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
 public class ChecklistActivity extends ActionBarActivity {
 
+    private final String COMPLETED_GREEN = "#669900";
+    private final String IN_PROGRESS_YELLOW = "#FFBB33";
+    private final int COLLAPSED = -90;
+    private final int EXPANDED = 0;
     private ListView mDrawerList;
     private DrawerLayout mDrawerLayout;
     private ArrayAdapter<String> mAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
-    private final String COMPLETED_GREEN = "#669900";
-    private final String IN_PROGRESS_YELLOW = "#FFBB33";
     private int indentationSize = 100;
-    private final int COLLAPSED = -90;
-    private final int EXPANDED = 0;
     private User user;
     private RequirementsList currentRequirementsList;
     private HonorsType requirementsListToShow = HonorsType.DEPARTMENTAL;  // Should be set by checklist selection
@@ -56,21 +55,18 @@ public class ChecklistActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checklist);
 
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             user = ((User) savedInstanceState.getSerializable("User"));
 
-        }
-        else
-        {
+        } else {
             user = ((HonorsApplication) this.getApplication()).getCurrentUser();
         }
 
         currentRequirementsList = user.getHandbook().getRequirementsList(requirementsListToShow);
 
 //        Menu Setup
-        mDrawerList = (ListView)findViewById(R.id.navList);
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
 
         addDrawerItems();
@@ -101,17 +97,14 @@ public class ChecklistActivity extends ActionBarActivity {
         super.onSaveInstanceState(outState);
     }
 
-    public void buildCheckList(ArrayList<Requirement> listOfRequirements, LinearLayout parentLayout)
-    {
-        for (final Requirement requirement : listOfRequirements)
-        {
+    public void buildCheckList(ArrayList<Requirement> listOfRequirements, LinearLayout parentLayout) {
+        for (final Requirement requirement : listOfRequirements) {
             buildRequirementRow(requirement, parentLayout);
         }
     }
 
     private void buildRequirementRow(final Requirement requirement, LinearLayout parentLayout) {
-        if (requirement.hasComponent())
-        {
+        if (requirement.hasComponent()) {
             LinearLayout requirementBlock = new LinearLayout(this);
             requirementBlock.setOrientation(LinearLayout.VERTICAL);
             requirementBlock.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -134,11 +127,9 @@ public class ChecklistActivity extends ActionBarActivity {
         requirementCheckbox.setLayoutParams(new ActionBar.LayoutParams(75, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER));
         requirementCheckbox.setHeight(ActionBar.LayoutParams.MATCH_PARENT);
 
-        if (requirement.getHierarchyLevel() == 0)
-        {
+        if (requirement.getHierarchyLevel() == 0) {
             requirementCheckbox.setClickable(false);
-        }
-        else {
+        } else {
             requirementRow.setVisibility(View.GONE);
             for (int numberOfPaddingBlocks = 0; numberOfPaddingBlocks < requirement.getHierarchyLevel(); numberOfPaddingBlocks++) {
                 Space space = new Space(this);
@@ -157,24 +148,18 @@ public class ChecklistActivity extends ActionBarActivity {
         dropDownArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (dropDownArrow.getRotation() == COLLAPSED)
-                {
+                if (dropDownArrow.getRotation() == COLLAPSED) {
                     dropDownArrow.setRotation(EXPANDED);
-                }
-                else
-                {
+                } else {
                     dropDownArrow.setRotation(COLLAPSED);
                 }
                 toggleComponentDropDown(v);
             }
         });
 
-        if (requirement.hasComponent())
-        {
+        if (requirement.hasComponent()) {
             dropDownArrow.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             dropDownArrow.setVisibility(View.INVISIBLE);
         }
         requirementRow.addView(dropDownArrow);
@@ -185,21 +170,15 @@ public class ChecklistActivity extends ActionBarActivity {
         if (requirement.getHierarchyLevel() == 0)  // Heading Requirement
         {
             requirementTitle.setTextSize(26);
-        }
-        else {  // Component
+        } else {  // Component
             requirementTitle.setTextSize(18);
         }
 
-        if (requirement.isCompleted())
-        {
+        if (requirement.isCompleted()) {
             requirementTitle.setTextColor(Color.parseColor(COMPLETED_GREEN));
-        }
-        else if (requirement.isInProgress())
-        {
+        } else if (requirement.isInProgress()) {
             requirementTitle.setTextColor(Color.parseColor(IN_PROGRESS_YELLOW));
-        }
-        else
-        {
+        } else {
             requirementTitle.setTextColor(Color.BLACK);
         }
 
@@ -226,19 +205,16 @@ public class ChecklistActivity extends ActionBarActivity {
 
         parentLayout.addView(requirementRow);
 
-        for (Requirement component : requirement.getComponents())
-        {
+        for (Requirement component : requirement.getComponents()) {
             buildRequirementRow(component, parentLayout);
         }
     }
 
-    private void toggleComponentDropDown(View view)
-    {
+    private void toggleComponentDropDown(View view) {
         ViewParent requirementRow = view.getParent();
         ViewGroup requirementBlock = (ViewGroup) requirementRow.getParent();
 
-        for (int rowIndex = 1; rowIndex < requirementBlock.getChildCount(); rowIndex++)
-        {
+        for (int rowIndex = 1; rowIndex < requirementBlock.getChildCount(); rowIndex++) {
             View componentRow = requirementBlock.getChildAt(rowIndex);
             if (view.getRotation() == COLLAPSED)
                 componentRow.setVisibility(View.GONE);
@@ -268,12 +244,10 @@ public class ChecklistActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onCheck(final CheckBox checkbox, final Requirement requirement)
-    {
-        if (checkbox.isChecked()){
+    public void onCheck(final CheckBox checkbox, final Requirement requirement) {
+        if (checkbox.isChecked()) {
             displayCoachingStep(requirement, checkbox);
-        }
-        else  // The checkbox was already checked before!
+        } else  // The checkbox was already checked before!
         {
             AlertDialog.Builder markRequirementIncompleteAlert = new AlertDialog.Builder(this);
             markRequirementIncompleteAlert.setMessage("Are you sure you'd like to mark this requirement as incomplete? You will lose all recorded progress for this requirement.");
@@ -286,11 +260,9 @@ public class ChecklistActivity extends ActionBarActivity {
 
                     ViewGroup row = (ViewGroup) checkbox.getParent();
 
-                    for (int viewIndex = 0; viewIndex < row.getChildCount(); viewIndex++)
-                    {
+                    for (int viewIndex = 0; viewIndex < row.getChildCount(); viewIndex++) {
                         View view = row.getChildAt(viewIndex);
-                        if (view instanceof TextView)
-                        {
+                        if (view instanceof TextView) {
                             ((TextView) view).setTextColor(Color.BLACK);
                         }
                     }
@@ -314,83 +286,37 @@ public class ChecklistActivity extends ActionBarActivity {
 
     }
 
-    private class CoachingStepPositiveListener implements DialogInterface.OnClickListener
-    {
-        private boolean isLastCoachingStep;
-        private CheckBox checkbox;
-        private Requirement requirement;
-        private LinkedList<String> coachingSteps;
-
-        public CoachingStepPositiveListener(boolean isLastCoachingStep, Requirement requirement, CheckBox checkbox) {
-            this.isLastCoachingStep = isLastCoachingStep;
-            this.checkbox = checkbox;
-            this.requirement = requirement;
-            this.coachingSteps = requirement.getCoachingSteps();
-        }
-
-        @Override
-        public void onClick(DialogInterface dialogInterface, int which) {
-            if (isLastCoachingStep) {
-                checkbox.setChecked(true);
-                requirement.setInProgress(false);
-                requirement.setCompleted(true);
-                coachingSteps.removeFirst();
-
-                updateRequirementTextColor(checkbox, requirement);
-                // Write to Database Here
-            }
-            else
-            {
-                coachingSteps.removeFirst();
-                requirement.setInProgress(true);
-
-                displayCoachingStep(requirement, checkbox);
-            }
-        }
-    }
-
     private void updateRequirementTextColor(CheckBox checkbox, Requirement requirement) {
         ViewGroup row = (ViewGroup) checkbox.getParent();
         TextView requirementTextView = null;
 
-        for (int viewIndex = 0; viewIndex < row.getChildCount(); viewIndex++)
-        {
+        for (int viewIndex = 0; viewIndex < row.getChildCount(); viewIndex++) {
             View view = row.getChildAt(viewIndex);
-            if (view instanceof TextView && !(view instanceof CheckBox))
-            {
+            if (view instanceof TextView && !(view instanceof CheckBox)) {
                 requirementTextView = (TextView) view;
                 break;
             }
         }
 
-        if (checkbox.isChecked())
-        {
+        if (checkbox.isChecked()) {
             requirementTextView.setTextColor(Color.parseColor(COMPLETED_GREEN));
 
-        }
-        else
-        {
+        } else {
             requirementTextView.setTextColor(Color.BLACK);
         }
 
         ViewGroup block = (ViewGroup) row.getParent();
         TextView parentRequirementTextView = null;
         CheckBox parentRequirementCheckBox = null;
-        for (int viewIndex = 0; viewIndex < block.getChildCount(); viewIndex++)
-        {
+        for (int viewIndex = 0; viewIndex < block.getChildCount(); viewIndex++) {
             View view = block.getChildAt(viewIndex);
-            if (view instanceof LinearLayout)
-            {
+            if (view instanceof LinearLayout) {
                 ViewGroup parentRow = (ViewGroup) view;
-                for (int viewIndex2 = 0; viewIndex2 < parentRow.getChildCount(); viewIndex2++)
-                {
+                for (int viewIndex2 = 0; viewIndex2 < parentRow.getChildCount(); viewIndex2++) {
                     View view2 = parentRow.getChildAt(viewIndex2);
-                    if (view2 instanceof  CheckBox)
-                    {
+                    if (view2 instanceof CheckBox) {
                         parentRequirementCheckBox = (CheckBox) view2;
-                    }
-                    else if (view2 instanceof TextView)
-                    {
+                    } else if (view2 instanceof TextView) {
                         parentRequirementTextView = (TextView) view2;
                     }
                 }
@@ -402,46 +328,23 @@ public class ChecklistActivity extends ActionBarActivity {
         if (requirement.getParentRequirement().isCompleted()) {
             parentRequirementTextView.setTextColor(Color.parseColor(COMPLETED_GREEN));
             parentRequirementCheckBox.setChecked(true);
-        }
-        else if (requirement.getParentRequirement().isInProgress())
-        {
+        } else if (requirement.getParentRequirement().isInProgress()) {
             parentRequirementTextView.setTextColor(Color.parseColor(IN_PROGRESS_YELLOW));
             parentRequirementCheckBox.setChecked(false);
-        }
-        else
-        {
+        } else {
             parentRequirementTextView.setTextColor(Color.BLACK);
             parentRequirementCheckBox.setChecked(false);
         }
     }
 
-    private class CoachingStepNegativeListener implements DialogInterface.OnClickListener
-    {
-        private CheckBox checkbox;
-
-        public CoachingStepNegativeListener(CheckBox checkbox) {
-            this.checkbox = checkbox;
-        }
-
-        @Override
-        public void onClick(DialogInterface dialogInterface, int which) {
-            checkbox.setChecked(false);
-        }
-    }
-
-
-    private void displayCoachingStep(final Requirement requirement, final CheckBox currentCheckBox)
-    {
+    private void displayCoachingStep(final Requirement requirement, final CheckBox currentCheckBox) {
         LinkedList<String> coachingSteps = requirement.getCoachingSteps();
         String coachingStep = coachingSteps.peek();
 
         final boolean isLastCoachingStep;
-        if (coachingSteps.peekLast().equals(coachingStep))
-        {
+        if (coachingSteps.peekLast().equals(coachingStep)) {
             isLastCoachingStep = true;
-        }
-        else
-        {
+        } else {
             isLastCoachingStep = false;
         }
 
@@ -457,7 +360,7 @@ public class ChecklistActivity extends ActionBarActivity {
     }
 
     private void addDrawerItems() {
-        String[] osArray = { "Settings", "In Progress Requirements" };
+        String[] osArray = {"Settings", "In Progress Requirements"};
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
 
@@ -512,5 +415,50 @@ public class ChecklistActivity extends ActionBarActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    private class CoachingStepPositiveListener implements DialogInterface.OnClickListener {
+        private boolean isLastCoachingStep;
+        private CheckBox checkbox;
+        private Requirement requirement;
+        private LinkedList<String> coachingSteps;
+
+        public CoachingStepPositiveListener(boolean isLastCoachingStep, Requirement requirement, CheckBox checkbox) {
+            this.isLastCoachingStep = isLastCoachingStep;
+            this.checkbox = checkbox;
+            this.requirement = requirement;
+            this.coachingSteps = requirement.getCoachingSteps();
+        }
+
+        @Override
+        public void onClick(DialogInterface dialogInterface, int which) {
+            if (isLastCoachingStep) {
+                checkbox.setChecked(true);
+                requirement.setInProgress(false);
+                requirement.setCompleted(true);
+                coachingSteps.removeFirst();
+
+                updateRequirementTextColor(checkbox, requirement);
+                // Write to Database Here
+            } else {
+                coachingSteps.removeFirst();
+                requirement.setInProgress(true);
+
+                displayCoachingStep(requirement, checkbox);
+            }
+        }
+    }
+
+    private class CoachingStepNegativeListener implements DialogInterface.OnClickListener {
+        private CheckBox checkbox;
+
+        public CoachingStepNegativeListener(CheckBox checkbox) {
+            this.checkbox = checkbox;
+        }
+
+        @Override
+        public void onClick(DialogInterface dialogInterface, int which) {
+            checkbox.setChecked(false);
+        }
     }
 }

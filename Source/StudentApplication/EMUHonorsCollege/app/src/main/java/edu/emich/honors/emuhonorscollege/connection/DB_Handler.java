@@ -1,5 +1,8 @@
 package edu.emich.honors.emuhonorscollege.connection;
 
+import android.content.Context;
+import android.os.StrictMode;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -12,10 +15,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
-import android.content.Context;
-import android.os.StrictMode;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -23,16 +22,21 @@ import java.util.List;
 
 /**
  * Created by Jordan on 4/15/2015.
- *
- *
  */
 public class DB_Handler {
 
     private static DB_Handler instance;
-
-    private HttpClient client;
     private final String DESTINATION = "http://db2.emich.edu/~201501_cosc481_group01/other/ajax_handler.php";
+    private HttpClient client;
     private Context context;
+
+    //constructor
+    private DB_Handler(Context context) {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        this.context = context;
+        this.client = new DefaultHttpClient();
+    }
 
     public static DB_Handler getInstance(Context context) {
         if (DB_Handler.instance == null) {
@@ -41,18 +45,9 @@ public class DB_Handler {
         return instance;
     }
 
-    //constructor
-    private DB_Handler(Context context){
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        this.context = context;
-        this.client = new DefaultHttpClient();
-    }
-
-
-//method every time we need to send to remote DB
+    //method every time we need to send to remote DB
 //many methods below are using sendToRemote()
-    private JSONObject sendToRemote(String request, JSONObject obj){
+    private JSONObject sendToRemote(String request, JSONObject obj) {
         String result = "";
         HttpPost post = new HttpPost(DESTINATION);
         try {
@@ -76,14 +71,14 @@ public class DB_Handler {
 
         JSONObject jsonResult = null;
         try {
-            jsonResult = new JSONObject( result);
+            jsonResult = new JSONObject(result);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return   jsonResult;
+        return jsonResult;
     }
 
-    public JSONObject login(String user_name, String password){
+    public JSONObject login(String user_name, String password) {
         JSONObject object = new JSONObject();
         try {
             object.put("username", user_name);
@@ -101,8 +96,8 @@ public class DB_Handler {
     //public JSONObject update_user(JSONObject user_data)
 
 
-//insert into table
-    public boolean addLocalHandbook(JSONObject handbook){
+    //insert into table
+    public boolean addLocalHandbook(JSONObject handbook) {
 
         boolean isFinished = false;
 
@@ -112,8 +107,7 @@ public class DB_Handler {
             /*********** Process each JSON Node ************/
             int lengthJsonArr = yearAndType.length();
 
-            for(int i=0; i < lengthJsonArr; i++)
-            {
+            for (int i = 0; i < lengthJsonArr; i++) {
                 /****** Get Object for each JSON node.***********/
                 JSONObject jsonChildNode = yearAndType.getJSONObject(i);
 
@@ -138,8 +132,8 @@ public class DB_Handler {
         return isFinished;
     }
 
- //check if we have using SQLite query
-    public boolean isLocalHandbook(String handbook_year, String honors_type){
+    //check if we have using SQLite query
+    public boolean isLocalHandbook(String handbook_year, String honors_type) {
         JSONObject object = new JSONObject();
         try {
             object.put("handbook_year", handbook_year);
@@ -151,7 +145,7 @@ public class DB_Handler {
     }
 
 
-    public JSONObject handbookRequest(String year, String type){
+    public JSONObject handbookRequest(String year, String type) {
         JSONObject object = new JSONObject();
         try {
             object.put("year", year);

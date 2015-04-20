@@ -5,15 +5,7 @@ package edu.emich.honors.emuhonorscollege.activities;
  */
 
 
-
 import android.app.ActionBar;
-import android.view.Gravity;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-
-import android.widget.TextView;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,13 +14,18 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -50,7 +47,7 @@ public class InProgressActivity extends ActionBarActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
     private ArrayList<Requirement> mRequirements;
-   // private User user = new User();
+    // private User user = new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +56,8 @@ public class InProgressActivity extends ActionBarActivity {
 
 
         //Menu Setup
-        mDrawerList = (ListView)findViewById(R.id.navList);
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.navList);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
 
         addDrawerItems();
@@ -74,20 +71,16 @@ public class InProgressActivity extends ActionBarActivity {
 
         //        Placeholder for a real list of requirements pulled from the DB
         ArrayList<Requirement> tempListOfRequirements = new ArrayList<>();
-        for (int i = 0; i < 8; i++)
-        {
+        for (int i = 0; i < 8; i++) {
             LinkedList<String> dummyCoachingSteps = new LinkedList<String>();
             dummyCoachingSteps.add("Did you put your left foot in?");
             dummyCoachingSteps.add("Did you put your left foot out?");
             dummyCoachingSteps.add("Did you put your left foot in and shake it all about?");
 
-            Requirement tempComponent = new Requirement("Requirement " + i, 3 , dummyCoachingSteps);
-            if (i % 2 == 0)
-            {
+            Requirement tempComponent = new Requirement("Requirement " + i, 3, dummyCoachingSteps);
+            if (i % 2 == 0) {
                 tempComponent.setNumberOfCompleted(3);
-            }
-            else
-            {
+            } else {
                 tempComponent.addComponent(new Requirement());
                 tempComponent.setInProgress(true);
             }
@@ -96,14 +89,11 @@ public class InProgressActivity extends ActionBarActivity {
         RequirementsList requirementsList = new RequirementsList(HandbookYear.YEAR_2014, HonorsType.UNIVERSITY, tempListOfRequirements);
 
 
-
         buildCheckList(tempListOfRequirements, parentLayout);
     }
 
-    public void buildCheckList(ArrayList<Requirement> listOfRequirements, LinearLayout parentLayout)
-    {
-        for (final Requirement requirement : listOfRequirements)
-        {
+    public void buildCheckList(ArrayList<Requirement> listOfRequirements, LinearLayout parentLayout) {
+        for (final Requirement requirement : listOfRequirements) {
             LinearLayout requirementRow = new LinearLayout(this);
             requirementRow.setOrientation(LinearLayout.HORIZONTAL);
             requirementRow.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -116,9 +106,9 @@ public class InProgressActivity extends ActionBarActivity {
                 }
             });
 
-            if(!requirement.isInProgress()){
+            if (!requirement.isInProgress()) {
                 continue;
-            }else {
+            } else {
 
                 requirementCheckbox.setLayoutParams(new ActionBar.LayoutParams(75, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER));
                 requirementCheckbox.setHeight(ActionBar.LayoutParams.MATCH_PARENT);
@@ -132,24 +122,18 @@ public class InProgressActivity extends ActionBarActivity {
                 dropDownArrow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (dropDownArrow.getRotation() == -90)
-                        {
+                        if (dropDownArrow.getRotation() == -90) {
                             dropDownArrow.setRotation(0);
-                        }
-                        else
-                        {
+                        } else {
                             dropDownArrow.setRotation(-90);
                         }
                         Toast.makeText(getApplicationContext(), "Drop down!", Toast.LENGTH_SHORT).show();
                     }
                 });
 
-                if (requirement.hasComponent())
-                {
+                if (requirement.hasComponent()) {
                     dropDownArrow.setVisibility(View.VISIBLE);
-                }
-                else
-                {
+                } else {
                     dropDownArrow.setVisibility(View.INVISIBLE);
                 }
                 requirementRow.addView(dropDownArrow);
@@ -212,12 +196,10 @@ public class InProgressActivity extends ActionBarActivity {
     }
 
 
-    public void onCheck(final CheckBox checkbox, final Requirement requirement)
-    {
-        if (checkbox.isChecked()){
+    public void onCheck(final CheckBox checkbox, final Requirement requirement) {
+        if (checkbox.isChecked()) {
             displayCoachingStep(requirement, checkbox);
-        }
-        else  // The checkbox was already checked before!
+        } else  // The checkbox was already checked before!
         {
             AlertDialog.Builder markRequirementIncompleteAlert = new AlertDialog.Builder(this);
             markRequirementIncompleteAlert.setMessage("Are you sure you'd like to mark this requirement as incomplete? You will lose all recorded progress for this requirement.");
@@ -246,67 +228,14 @@ public class InProgressActivity extends ActionBarActivity {
         }
     }
 
-    private class CoachingStepPositiveListener implements DialogInterface.OnClickListener
-    {
-        private boolean isLastCoachingStep;
-        private CheckBox checkbox;
-        private Requirement requirement;
-        private LinkedList<String> coachingSteps;
-
-        public CoachingStepPositiveListener(boolean isLastCoachingStep, Requirement requirement, CheckBox checkbox) {
-            this.isLastCoachingStep = isLastCoachingStep;
-            this.checkbox = checkbox;
-            this.requirement = requirement;
-            this.coachingSteps = requirement.getCoachingSteps();
-        }
-
-        @Override
-        public void onClick(DialogInterface dialogInterface, int which) {
-            if (isLastCoachingStep) {
-                Toast.makeText(getApplicationContext(), "Requirement completed!", Toast.LENGTH_SHORT).show();
-                checkbox.setChecked(true);
-                requirement.setInProgress(false);
-                requirement.setCompleted(true);
-                coachingSteps.removeFirst();
-                // Write to Database Here
-            }
-            else
-            {
-                coachingSteps.removeFirst();
-                requirement.setInProgress(true);
-                displayCoachingStep(requirement, checkbox);
-            }
-        }
-    }
-
-    private class CoachingStepNegativeListener implements DialogInterface.OnClickListener
-    {
-        private CheckBox checkbox;
-
-        public CoachingStepNegativeListener(CheckBox checkbox) {
-            this.checkbox = checkbox;
-        }
-
-        @Override
-        public void onClick(DialogInterface dialogInterface, int which) {
-            Toast.makeText(getApplicationContext(), "Requirement still needs completion.", Toast.LENGTH_SHORT).show();
-            checkbox.setChecked(false);
-        }
-    }
-
-
-    private void displayCoachingStep(final Requirement requirement, final CheckBox currentCheckBox)
-    {
+    private void displayCoachingStep(final Requirement requirement, final CheckBox currentCheckBox) {
         LinkedList<String> coachingSteps = requirement.getCoachingSteps();
         String coachingStep = coachingSteps.peek();
 
         final boolean isLastCoachingStep;
-        if (coachingSteps.peekLast().equals(coachingStep))
-        {
+        if (coachingSteps.peekLast().equals(coachingStep)) {
             isLastCoachingStep = true;
-        }
-        else
-        {
+        } else {
             isLastCoachingStep = false;
         }
 
@@ -322,14 +251,14 @@ public class InProgressActivity extends ActionBarActivity {
     }
 
     private void addDrawerItems() {
-        String[] osArray = { "Settings", "Back to Login", "In Progress" };
+        String[] osArray = {"Settings", "Back to Login", "In Progress"};
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        @Override
+            @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch(position) {
+                switch (position) {
                     case 0:
                         Intent a = new Intent(InProgressActivity.this, SettingsActivity.class);
                         startActivity(a);
@@ -381,5 +310,49 @@ public class InProgressActivity extends ActionBarActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    private class CoachingStepPositiveListener implements DialogInterface.OnClickListener {
+        private boolean isLastCoachingStep;
+        private CheckBox checkbox;
+        private Requirement requirement;
+        private LinkedList<String> coachingSteps;
+
+        public CoachingStepPositiveListener(boolean isLastCoachingStep, Requirement requirement, CheckBox checkbox) {
+            this.isLastCoachingStep = isLastCoachingStep;
+            this.checkbox = checkbox;
+            this.requirement = requirement;
+            this.coachingSteps = requirement.getCoachingSteps();
+        }
+
+        @Override
+        public void onClick(DialogInterface dialogInterface, int which) {
+            if (isLastCoachingStep) {
+                Toast.makeText(getApplicationContext(), "Requirement completed!", Toast.LENGTH_SHORT).show();
+                checkbox.setChecked(true);
+                requirement.setInProgress(false);
+                requirement.setCompleted(true);
+                coachingSteps.removeFirst();
+                // Write to Database Here
+            } else {
+                coachingSteps.removeFirst();
+                requirement.setInProgress(true);
+                displayCoachingStep(requirement, checkbox);
+            }
+        }
+    }
+
+    private class CoachingStepNegativeListener implements DialogInterface.OnClickListener {
+        private CheckBox checkbox;
+
+        public CoachingStepNegativeListener(CheckBox checkbox) {
+            this.checkbox = checkbox;
+        }
+
+        @Override
+        public void onClick(DialogInterface dialogInterface, int which) {
+            Toast.makeText(getApplicationContext(), "Requirement still needs completion.", Toast.LENGTH_SHORT).show();
+            checkbox.setChecked(false);
+        }
     }
 }

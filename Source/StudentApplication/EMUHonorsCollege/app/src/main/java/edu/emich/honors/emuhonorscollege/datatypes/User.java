@@ -7,7 +7,7 @@ import java.util.Arrays;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.GraduationTerm;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
-public class User implements Serializable{
+public class User implements Serializable {
 
     private String email;
     private char[] password;
@@ -32,6 +32,12 @@ public class User implements Serializable{
         this.graduationDate = graduationDate;
     }
 
+    public static User getSampleUser() {
+        ArrayList<HonorsType> sampleHonorsType = new ArrayList<>(Arrays.asList(HonorsType.DEPARTMENTAL));
+        User sampleUser = new User("jsmith@emich.edu", "password".toCharArray(), "John", "Smith", HonorsHandbook.getSampleHandbook(), sampleHonorsType, "E03487695", null, new GraduationDate(GraduationTerm.FALL, "2018"));
+        return sampleUser;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -44,11 +50,13 @@ public class User implements Serializable{
         return eID;
     }
 
+    public char[] getPassword() {
+        return password;
+    }
+
     public void setPassword(char[] password) {
         this.password = password;
     }
-
-    public char[] getPassword() {return password;}
 
     public ArrayList<HonorsType> getHonorsTypes() {
         return honorsTypes;
@@ -88,12 +96,5 @@ public class User implements Serializable{
 
     public void setHandbook(HonorsHandbook handbook) {
         this.handbook = handbook;
-    }
-
-    public static User getSampleUser()
-    {
-        ArrayList<HonorsType> sampleHonorsType = new ArrayList<>(Arrays.asList(HonorsType.DEPARTMENTAL));
-        User sampleUser = new User("jsmith@emich.edu", "password".toCharArray(), "John", "Smith", HonorsHandbook.getSampleHandbook(), sampleHonorsType, "E03487695", null, new GraduationDate(GraduationTerm.FALL, "2018"));
-        return sampleUser;
     }
 }

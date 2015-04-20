@@ -5,7 +5,7 @@ import java.io.Serializable;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HandbookYear;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
-public class HonorsHandbook  implements Serializable {
+public class HonorsHandbook implements Serializable {
     HandbookYear handbookYear;
     RequirementsList departmentalHonorsRequirements;
     RequirementsList universityHonorsRequirements;
@@ -14,12 +14,16 @@ public class HonorsHandbook  implements Serializable {
     public HonorsHandbook(HandbookYear handbookYear,
                           RequirementsList departmentalHonorsRequirements,
                           RequirementsList universityHonorsRequirements,
-                          RequirementsList highestHonorsRequirements)
-    {
+                          RequirementsList highestHonorsRequirements) {
         this.handbookYear = handbookYear;
         this.departmentalHonorsRequirements = departmentalHonorsRequirements;
         this.universityHonorsRequirements = universityHonorsRequirements;
         this.highestHonorsRequirements = highestHonorsRequirements;
+    }
+
+    public static HonorsHandbook getSampleHandbook() {
+        HonorsHandbook sampleHandbook = new HonorsHandbook(HandbookYear.YEAR_2014, RequirementsList.getSampleRequirementsList(), null, null);
+        return sampleHandbook;
     }
 
     public HandbookYear getHandbookYear() {
@@ -38,26 +42,14 @@ public class HonorsHandbook  implements Serializable {
         return highestHonorsRequirements;
     }
 
-    public static HonorsHandbook getSampleHandbook()
-    {
-        HonorsHandbook sampleHandbook = new HonorsHandbook(HandbookYear.YEAR_2014, RequirementsList.getSampleRequirementsList(), null, null);
-        return sampleHandbook;
-    }
-
-    public RequirementsList getRequirementsList(HonorsType honorsType)
-    {
+    public RequirementsList getRequirementsList(HonorsType honorsType) {
         RequirementsList requirementsListToReturn = null;
 
-        if (honorsType == HonorsType.UNIVERSITY)
-        {
+        if (honorsType == HonorsType.UNIVERSITY) {
             requirementsListToReturn = getUniversityHonorsRequirements();
-        }
-        else if (honorsType == HonorsType.DEPARTMENTAL)
-        {
+        } else if (honorsType == HonorsType.DEPARTMENTAL) {
             requirementsListToReturn = getDepartmentalHonorsRequirements();
-        }
-        else if (honorsType == HonorsType.HIGHEST)
-        {
+        } else if (honorsType == HonorsType.HIGHEST) {
             requirementsListToReturn = getHighestHonorsRequirements();
         }
 

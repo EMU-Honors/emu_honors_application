@@ -2,10 +2,9 @@ package edu.emich.honors.emuhonorscollege.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -14,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 
 import edu.emich.honors.emuhonorscollege.R;
@@ -101,12 +101,9 @@ public class NewUserActivity extends ActionBarActivity {
 
         ArrayList<HonorsType> honorsTypes = null;
 
-        try
-        {
+        try {
             honorsTypes = buildHonorsTypes();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.println(Log.DEBUG, "New User Guardrail", e.getMessage());
         }
 
@@ -115,21 +112,20 @@ public class NewUserActivity extends ActionBarActivity {
         //Show attributes of the newly created User
         String honorsTypesString = "";
 
-        for (HonorsType type : newUser.getHonorsTypes())
-        {
+        for (HonorsType type : newUser.getHonorsTypes()) {
             honorsTypesString += type.toString() + "\n";
         }
 
         String newUserSummaryText =
                 "First Name: " + newUser.getFirstName() +
-                "\nLast Name: " + newUser.getLastName() +
-                "\nEmail: " + newUser.getEmail() +
-                "\nPassword: " + password +
-                "\nEID: " + newUser.getEID() +
-                "\nHonors Types: " + honorsTypesString +
-                "\nMajor: " + newUser.getFieldOfStudy().getMajors().get(0).toString() +
-                "\nMinor: " + newUser.getFieldOfStudy().getMinors().get(0).toString() +
-                "\nGraduation Date: " + newUser.getGraduationDate().getTerm() + " " + newUser.getGraduationDate().getYear();
+                        "\nLast Name: " + newUser.getLastName() +
+                        "\nEmail: " + newUser.getEmail() +
+                        "\nPassword: " + password +
+                        "\nEID: " + newUser.getEID() +
+                        "\nHonors Types: " + honorsTypesString +
+                        "\nMajor: " + newUser.getFieldOfStudy().getMajors().get(0).toString() +
+                        "\nMinor: " + newUser.getFieldOfStudy().getMinors().get(0).toString() +
+                        "\nGraduation Date: " + newUser.getGraduationDate().getTerm() + " " + newUser.getGraduationDate().getYear();
 
         AlertDialog.Builder newUserSummaryDialog = new AlertDialog.Builder(this);
         newUserSummaryDialog.setTitle("New User Summary");
@@ -145,45 +141,37 @@ public class NewUserActivity extends ActionBarActivity {
         newUserSummaryDialog.show();
     }
 
-    private GraduationDate buildGraduationDate()
-    {
+    private GraduationDate buildGraduationDate() {
         GraduationTerm term = (GraduationTerm) graduationTermSpinner.getSelectedItem();
         String year = (String) graduationYearSpinner.getSelectedItem();
 
         return new GraduationDate(term, year);
     }
 
-    private FieldOfStudy buildFieldOfStudy()
-    {
+    private FieldOfStudy buildFieldOfStudy() {
         AcademicProgram major = (AcademicProgram) majorSpinner.getSelectedItem();
         AcademicProgram minor = (AcademicProgram) minorSpinner.getSelectedItem();
 
         return new FieldOfStudy(major, minor);
     }
 
-    private ArrayList<HonorsType> buildHonorsTypes() throws Exception
-    {
+    private ArrayList<HonorsType> buildHonorsTypes() throws Exception {
         ArrayList<HonorsType> newUserHonorsTypes = new ArrayList<>();
 
-        if (departmentalHonorsCheckBox.isChecked())
-        {
+        if (departmentalHonorsCheckBox.isChecked()) {
             newUserHonorsTypes.add(HonorsType.DEPARTMENTAL);
         }
-        if (universityHonorsCheckBox.isChecked())
-        {
+        if (universityHonorsCheckBox.isChecked()) {
             newUserHonorsTypes.add(HonorsType.UNIVERSITY);
         }
-        if (highestHonorsCheckBox.isChecked())
-        {
+        if (highestHonorsCheckBox.isChecked()) {
             newUserHonorsTypes.add(HonorsType.HIGHEST);
         }
-        if (fullHonorsCheckBox.isChecked())
-        {
+        if (fullHonorsCheckBox.isChecked()) {
             newUserHonorsTypes.add(HonorsType.FULL);
         }
 
-        if (newUserHonorsTypes.isEmpty())
-        {
+        if (newUserHonorsTypes.isEmpty()) {
             throw new Exception("No Honors Type selected.");
         }
 
