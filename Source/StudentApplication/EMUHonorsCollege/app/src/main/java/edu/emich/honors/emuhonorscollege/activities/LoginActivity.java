@@ -43,6 +43,8 @@ public class LoginActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
+        DB_Handler.getInstance(getApplicationContext());
+
         newUserButton = (Button) findViewById(R.id.login_new_user);
         submitButton = (Button) findViewById(R.id.login_submit);
         mDrawerList = (ListView) findViewById(R.id.navList);
@@ -84,7 +86,7 @@ public class LoginActivity extends ActionBarActivity {
     }
 
     public void submitLoginCredentials(View view) {
-        DB_Handler instance = DB_Handler.getInstance(this);
+        DB_Handler instance = DB_Handler.getInstance(getApplicationContext());
         JSONObject login = instance.login(this.userNameField.getText().toString(), this.userPassField.getText().toString());
         String response = "fail";
         try {

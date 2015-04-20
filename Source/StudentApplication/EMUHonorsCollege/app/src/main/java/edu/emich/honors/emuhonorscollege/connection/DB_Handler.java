@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.StrictMode;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -16,7 +15,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +25,8 @@ public class DB_Handler {
 
     private static DB_Handler instance;
     private final String DESTINATION = "http://db2.emich.edu/~201501_cosc481_group01/other/ajax_handler.php";
-    private HttpClient client;
-    private Context context;
+    private final HttpClient client;
+    private final Context context;
 
     //constructor
     private DB_Handler(Context context) {
@@ -68,10 +66,6 @@ public class DB_Handler {
             HttpResponse response = client.execute(post);
 
             result += EntityUtils.toString(response.getEntity());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -98,6 +92,9 @@ public class DB_Handler {
 
 
     //public JSONObject newUser(JSONObject user_data)
+    public JSONObject newUser(JSONObject userData) {
+        return sendToRemote("new_user", userData);
+    }
 
 
     //public JSONObject update_user(JSONObject user_data)
@@ -119,14 +116,14 @@ public class DB_Handler {
                 JSONObject jsonChildNode = yearAndType.getJSONObject(i);
 
                 /******* Fetch node values **********/
-                int dispNumber = Integer.parseInt(jsonChildNode.optString("display_number").toString());
-                String name = jsonChildNode.optString("requirement_name").toString();
-                String component = jsonChildNode.optString("name").toString();
-                int totalNeeded = Integer.parseInt(jsonChildNode.optString("total").toString());
-                String description = jsonChildNode.optString("description").toString();
+                int dispNumber = Integer.parseInt(jsonChildNode.optString("display_number"));
+                String name = jsonChildNode.optString("requirement_name");
+                String component = jsonChildNode.optString("name");
+                int totalNeeded = Integer.parseInt(jsonChildNode.optString("total"));
+                String description = jsonChildNode.optString("description");
 
                 SQLiteHelper localDB = new SQLiteHelper(this.context);
-                localDB.insertRequirement("2007", "deparmental", dispNumber, name, component, totalNeeded, description);
+                localDB.insertRequirement("2007", "departmental", dispNumber, name, component, totalNeeded, description);
 
                 isFinished = true;
             }

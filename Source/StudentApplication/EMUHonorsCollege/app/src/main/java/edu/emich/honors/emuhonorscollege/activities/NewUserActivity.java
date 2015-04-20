@@ -14,9 +14,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import edu.emich.honors.emuhonorscollege.R;
+import edu.emich.honors.emuhonorscollege.connection.DB_Handler;
 import edu.emich.honors.emuhonorscollege.datatypes.FieldOfStudy;
 import edu.emich.honors.emuhonorscollege.datatypes.GraduationDate;
 import edu.emich.honors.emuhonorscollege.datatypes.HonorsHandbook;
@@ -107,7 +111,26 @@ public class NewUserActivity extends ActionBarActivity {
             Log.println(Log.DEBUG, "New User Guardrail", e.getMessage());
         }
 
-        User newUser = new User(email, password, firstName, lastName, HonorsHandbook.getSampleHandbook(), honorsTypes, eID, fieldOfStudy, graduationDate);
+
+        JSONObject userdata = new JSONObject();
+        try {
+            userdata.put("username", emailEditText.getText());
+            userdata.put("password", passwordEditText.getText());
+            userdata.put("year", handbookYearSpinner.getSelectedItem().toString());
+            userdata.put("honors_type", honorsTypes);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(getApplicationContext(), handbookYearSpinner.getPrompt().toString(), Toast.LENGTH_LONG).show();
+        Log.d("ugh", handbookYearSpinner.getSelectedItem().toString());
+
+        DB_Handler instance = DB_Handler.getInstance(getApplicationContext());
+        instance.newUser(userdata);
+
+//        User newUser = new User(email, password, firstName, lastName, HonorsHandbook.getSampleHandbook(), honorsTypes, eID, fieldOfStudy, graduationDate);
+        User newUser = new User(email, password, firstName, lastName,
+                new HonorsHandbook((HandbookYear) handbookYearSpinner.getSelectedItem(), honorsTypes.get(0)),
+                honorsTypes, eID, fieldOfStudy, graduationDate);
 
         //Show attributes of the newly created User
         String honorsTypesString = "";

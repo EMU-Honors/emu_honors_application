@@ -21,6 +21,24 @@ public class HonorsHandbook implements Serializable {
         this.highestHonorsRequirements = highestHonorsRequirements;
     }
 
+    public HonorsHandbook(HandbookYear year, HonorsType type) {
+        this.handbookYear = year;
+        switch (type) {
+
+            case DEPARTMENTAL:
+                this.departmentalHonorsRequirements = RequirementFactory.createRequirementsList(year, type);
+                break;
+            case UNIVERSITY:
+                this.universityHonorsRequirements = RequirementFactory.createRequirementsList(year, type);
+                break;
+            case HIGHEST:
+                this.highestHonorsRequirements = RequirementFactory.createRequirementsList(year, type);
+                break;
+            case FULL:
+                break;
+        }
+    }
+
     public static HonorsHandbook getSampleHandbook() {
 //        HonorsHandbook sampleHandbook = new HonorsHandbook(HandbookYear.YEAR_2014, RequirementsList.getSampleRequirementsList(), null, null);
         HonorsHandbook sampleHandbook = new HonorsHandbook(HandbookYear.YEAR_2014,
