@@ -1,4 +1,4 @@
-package edu.emich.honors.testconnect;
+package edu.emich.honors.emuhonorscollege.connection;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
