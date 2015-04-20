@@ -91,14 +91,19 @@ public class LoginActivity extends ActionBarActivity {
         JSONObject login = instance.login(this.userNameField.getText().toString(), this.userPassField.getText().toString());
         String response = "fail";
         try {
-            //Log.d("hi", login.getString("response"));
+            Log.d("hi", login.getString("response"));
             response = login.getString("response");
+            if (response.equals("success")) {
+                Log.d("name", login.getString("content"));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
         if (response.equals("success")) {
-        ((HonorsApplication) this.getApplication()).setCurrentUser(User.getSampleUser());
-        startActivity(new Intent(this, ChecklistActivity.class));
+            ((HonorsApplication) this.getApplication()).setCurrentUser(User.getSampleUser());
+            startActivity(new Intent(this, ChecklistActivity.class));
+        } else {
+            Toast.makeText(getApplicationContext(), "Invalid Username/Password!", Toast.LENGTH_SHORT).show();
         }
 
     }
