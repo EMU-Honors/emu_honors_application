@@ -38,6 +38,13 @@ public class DB_Handler {
         this.client = new DefaultHttpClient();
     }
 
+    public static DB_Handler getInstance() {
+        if (DB_Handler.instance == null) {
+            System.exit(1);
+        }
+        return instance;
+    }
+
     public static DB_Handler getInstance(Context context) {
         if (DB_Handler.instance == null) {
             instance = new DB_Handler(context);

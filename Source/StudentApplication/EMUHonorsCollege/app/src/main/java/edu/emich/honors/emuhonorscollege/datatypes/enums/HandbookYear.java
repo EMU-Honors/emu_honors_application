@@ -4,6 +4,9 @@ package edu.emich.honors.emuhonorscollege.datatypes.enums;
  * This class may not be necessary, but acts as a placeholder until database connections are set up.
  */
 public enum HandbookYear {
+    YEAR_2007("2007-2008"),
+    YEAR_2008("2008-2009"),
+    YEAR_2009("2009-2010"),
     YEAR_2010("2010-2011"),
     YEAR_2011("2011-2012"),
     YEAR_2012("2012-2013"),
