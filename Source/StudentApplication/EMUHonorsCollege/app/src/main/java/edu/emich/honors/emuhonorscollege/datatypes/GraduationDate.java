@@ -1,11 +1,12 @@
 package edu.emich.honors.emuhonorscollege.datatypes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import edu.emich.honors.emuhonorscollege.datatypes.enums.GraduationTerm;
 
-public class GraduationDate {
+public class GraduationDate  implements Serializable {
     private GraduationTerm term;
     private String year;
     private static final int numberOfYearsToShow = 6;

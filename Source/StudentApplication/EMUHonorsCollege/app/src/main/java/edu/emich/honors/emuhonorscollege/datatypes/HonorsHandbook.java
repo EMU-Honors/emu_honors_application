@@ -1,9 +1,11 @@
 package edu.emich.honors.emuhonorscollege.datatypes;
 
+import java.io.Serializable;
+
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HandbookYear;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
-public class HonorsHandbook {
+public class HonorsHandbook  implements Serializable {
     HandbookYear handbookYear;
     RequirementsList departmentalHonorsRequirements;
     RequirementsList universityHonorsRequirements;

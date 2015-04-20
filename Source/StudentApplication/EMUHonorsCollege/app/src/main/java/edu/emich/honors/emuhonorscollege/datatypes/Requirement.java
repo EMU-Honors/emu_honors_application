@@ -1,9 +1,10 @@
 package edu.emich.honors.emuhonorscollege.datatypes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class Requirement{
+public class Requirement implements Serializable {
     private  String name;
     private  String description;
     private ArrayList<Requirement> components;

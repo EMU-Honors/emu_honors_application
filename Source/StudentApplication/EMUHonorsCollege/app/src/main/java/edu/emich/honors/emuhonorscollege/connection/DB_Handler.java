@@ -1,4 +1,4 @@
-package edu.emich.honors.testconnect;
+package edu.emich.honors.emuhonorscollege.connection;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.StrictMode;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -27,13 +28,23 @@ import java.util.List;
  */
 public class DB_Handler {
 
+    private static DB_Handler instance;
+
     private HttpClient client;
-    private final String DESTINATION = "http://db2.emich.edu/~201501_cosc481_group01/android_test.php";
+    private final String DESTINATION = "http://db2.emich.edu/~201501_cosc481_group01/other/ajax_handler.php";
     private Context context;
 
+    public static DB_Handler getInstance(Context context) {
+        if (DB_Handler.instance == null) {
+            instance = new DB_Handler(context);
+        }
+        return instance;
+    }
 
     //constructor
-    public DB_Handler(Context context){
+    private DB_Handler(Context context){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         this.context = context;
         this.client = new DefaultHttpClient();
     }

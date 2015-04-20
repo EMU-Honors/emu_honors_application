@@ -6,6 +6,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,10 +14,15 @@ import android.widget.Button;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import edu.emich.honors.emuhonorscollege.HonorsApplication;
 import edu.emich.honors.emuhonorscollege.R;
+import edu.emich.honors.emuhonorscollege.connection.DB_Handler;
 import edu.emich.honors.emuhonorscollege.datatypes.User;
 
 
@@ -30,6 +36,9 @@ public class LoginActivity extends ActionBarActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
 
+    private TextView userNameField;
+    private TextView userPassField;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +46,12 @@ public class LoginActivity extends ActionBarActivity {
 
         newUserButton = (Button) findViewById(R.id.login_new_user);
         submitButton = (Button) findViewById(R.id.login_submit);
-        mDrawerList = (ListView)findViewById(R.id.navList);mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView)findViewById(R.id.navList);
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         mActivityTitle = getTitle().toString();
+
+        this.userNameField = (TextView) findViewById(R.id.login_email);
+        this.userPassField = (TextView) findViewById(R.id.login_password);
 
         addDrawerItems();
         setupDrawer();
@@ -74,8 +87,20 @@ public class LoginActivity extends ActionBarActivity {
 
     public void submitLoginCredentials(View view)
     {
+        DB_Handler instance = DB_Handler.getInstance(this);
+        JSONObject login = instance.login(this.userNameField.getText().toString(), this.userPassField.getText().toString());
+        String response = "fail";
+        try {
+            //Log.d("hi", login.getString("response"));
+            response = login.getString("response");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (response.equals("success")) {
         ((HonorsApplication) this.getApplication()).setCurrentUser(User.getSampleUser());
         startActivity(new Intent(this, ChecklistActivity.class));
+        }
+
     }
 
     private void addDrawerItems() {

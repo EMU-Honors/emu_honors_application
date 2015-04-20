@@ -1,5 +1,6 @@
 package edu.emich.honors.emuhonorscollege.datatypes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -7,7 +8,7 @@ import java.util.LinkedList;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HandbookYear;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
-public class RequirementsList {
+public class RequirementsList  implements Serializable {
     private final HandbookYear handbookYear;
     private final HonorsType honorsType;
     private final ArrayList<Requirement> requirements;
