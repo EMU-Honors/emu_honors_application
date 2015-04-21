@@ -1,11 +1,12 @@
 package edu.emich.honors.emuhonorscollege.datatypes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import edu.emich.honors.emuhonorscollege.datatypes.enums.AcademicProgram;
 
-public class FieldOfStudy {
+public class FieldOfStudy implements Serializable {
     private ArrayList<AcademicProgram> majors;
     private ArrayList<AcademicProgram> minors;
 

@@ -51,35 +51,39 @@ public class LoginActivity extends ActionBarActivity {
         String username = this.userNameField.getText().toString().toLowerCase();
         String password = this.userPassField.getText().toString();
 
-        if (username.isEmpty() || password.isEmpty())
-        {
+        if (username.isEmpty() || password.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Invalid Username/Password", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             JSONObject login = instance.login(username, password);
 
-            String response = "fail";
-            try {
-                if (login.getString("response").equals("fail")) {
-                    Toast.makeText(getApplicationContext(), "Invalid Username/Password", Toast.LENGTH_SHORT).show();
-                } else {
-                    Log.d("hi", login.getString("response"));
-                    response = login.getString("response");
-                    if (response.equals("success")) {
-                        Log.d("name", login.getString("content"));
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            if (response.equals("success")) {
-                ((HonorsApplication) this.getApplication()).setCurrentUser(User.getSampleUser());
-                startActivity(new Intent(this, ChecklistActivity.class));
-            } else {
+            if (login == null) {
+                // Failed to connect
                 Toast.makeText(getApplicationContext(), "Invalid Username/Password", Toast.LENGTH_SHORT).show();
-            }
-        }
+            } else {
 
+                String response = "fail";
+                try {
+                    if (login.getString("response").equals("fail")) {
+                        Toast.makeText(getApplicationContext(), "Invalid Username/Password", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.d("hi", login.getString("response"));
+                        response = login.getString("response");
+                        if (response.equals("success")) {
+                            Log.d("name", login.getString("content"));
+                        }
+                    }
+                } catch (JSONException e) {
+//                e.printStackTrace();
+                }
+
+                if (response.equals("success")) {
+                    ((HonorsApplication) this.getApplication()).setCurrentUser(User.getSampleUser());
+                    startActivity(new Intent(this, ChecklistActivity.class));
+                } else {
+                    Toast.makeText(getApplicationContext(), "Invalid Username/Password", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        }
     }
 }

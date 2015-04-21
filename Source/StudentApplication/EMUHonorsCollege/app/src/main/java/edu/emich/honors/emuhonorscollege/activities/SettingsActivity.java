@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import edu.emich.honors.emuhonorscollege.HonorsApplication;
 import edu.emich.honors.emuhonorscollege.R;
 import edu.emich.honors.emuhonorscollege.datatypes.FieldOfStudy;
 import edu.emich.honors.emuhonorscollege.datatypes.GraduationDate;
@@ -40,7 +41,6 @@ public class SettingsActivity extends ActionBarActivity {
     FieldOfStudy fOfStudyTest = new FieldOfStudy(aMajorTest, aMinorTest);
     GraduationDate gradTest = new GraduationDate(GraduationTerm.FALL, "2015");
     char pasTest[];
-    private Button submitButton;
     private EditText oldPasswordEditText;
     private EditText newPasswordEditText;
     private CheckBox departmentalHonorsCheckBox;
@@ -73,7 +73,7 @@ public class SettingsActivity extends ActionBarActivity {
         universityHonorsCheckBox = (CheckBox) findViewById(R.id.universityHonorsCheckBox);
         highestHonorsCheckBox = (CheckBox) findViewById(R.id.highestHonorsCheckBox);
         fullHonorsCheckBox = (CheckBox) findViewById(R.id.fullHonorsCheckBox);
-        submitButton = (Button) findViewById(R.id.new_settings_submit);
+        Button submitButton = (Button) findViewById(R.id.new_settings_submit);
 
         //dummy data
 
@@ -125,60 +125,60 @@ public class SettingsActivity extends ActionBarActivity {
     }
 
     public void submitSettings(View view) {
-        boolean same = false;
-        String oldPassword = oldPasswordEditText.getText().toString();
-        char[] newPassword = newPasswordEditText.getText().toString().toCharArray();
-        String confirmPass = currentUser.getPassword().toString();
-
-
-        if (oldPassword.equals(confirmPass))
-            currentUser.setPassword(newPassword);
-
-
-        FieldOfStudy fieldOfStudy = buildFieldOfStudy();
-
-        currentUser.setFieldOfStudy(fieldOfStudy);
-
-        ArrayList<HonorsType> honorsTypes = null;
-
-        try {
-            honorsTypes = buildHonorsTypes();
-        } catch (Exception e) {
-            Log.println(Log.DEBUG, "New User Guardrail", e.getMessage());
-        }
-
-        currentUser.setHonorsTypes(honorsTypes);
-
-        //Show attributes of the newly created User
-        String honorsTypesString = "";
-
-        for (HonorsType type : currentUser.getHonorsTypes()) {
-            honorsTypesString += type.toString() + "\n";
-        }
-
-        String newUserSummaryText =
-                "First Name: " + currentUser.getFirstName() +
-                        "\nLast Name: " + currentUser.getLastName() +
-                        "\nEmail: " + currentUser.getEmail() +
-                        "\nPassword: " + currentUser.getPassword().toString() +
-                        "\nEID: " + currentUser.getEID() +
-                        "\nHonors Types: " + honorsTypesString +
-                        "\nMajor: " + currentUser.getFieldOfStudy().getMajors().get(0).toString() +
-                        "\nMinor: " + currentUser.getFieldOfStudy().getMinors().get(0).toString() +
-                        "\nGraduation Date: " + currentUser.getGraduationDate().getTerm() + " " + currentUser.getGraduationDate().getYear();
-
-        AlertDialog.Builder newUserSummaryDialog = new AlertDialog.Builder(this);
-        newUserSummaryDialog.setTitle("New User Summary");
-        newUserSummaryDialog.setMessage(newUserSummaryText);
-        newUserSummaryDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-                Toast.makeText(getApplicationContext(), "Thank you!", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        newUserSummaryDialog.show();
+//        boolean same = false;
+//        String oldPassword = oldPasswordEditText.getText().toString();
+//        char[] newPassword = newPasswordEditText.getText().toString().toCharArray();
+//        String confirmPass = currentUser.getPassword().toString();
+//
+//
+//        if (oldPassword.equals(confirmPass))
+//            currentUser.setPassword(newPassword);
+//
+//
+//        FieldOfStudy fieldOfStudy = buildFieldOfStudy();
+//
+//        currentUser.setFieldOfStudy(fieldOfStudy);
+//
+//        ArrayList<HonorsType> honorsTypes = null;
+//
+//        try {
+//            honorsTypes = buildHonorsTypes();
+//        } catch (Exception e) {
+//            Log.println(Log.DEBUG, "New User Guardrail", e.getMessage());
+//        }
+//
+//        currentUser.setHonorsTypes(honorsTypes);
+//
+//        //Show attributes of the newly created User
+//        String honorsTypesString = "";
+//
+//        for (HonorsType type : currentUser.getHonorsTypes()) {
+//            honorsTypesString += type.toString() + "\n";
+//        }
+//
+//        String newUserSummaryText =
+//                "First Name: " + currentUser.getFirstName() +
+//                        "\nLast Name: " + currentUser.getLastName() +
+//                        "\nEmail: " + currentUser.getEmail() +
+//                        "\nPassword: " + currentUser.getPassword().toString() +
+//                        "\nEID: " + currentUser.getEID() +
+//                        "\nHonors Types: " + honorsTypesString +
+//                        "\nMajor: " + currentUser.getFieldOfStudy().getMajors().get(0).toString() +
+//                        "\nMinor: " + currentUser.getFieldOfStudy().getMinors().get(0).toString() +
+//                        "\nGraduation Date: " + currentUser.getGraduationDate().getTerm() + " " + currentUser.getGraduationDate().getYear();
+//
+//        AlertDialog.Builder newUserSummaryDialog = new AlertDialog.Builder(this);
+//        newUserSummaryDialog.setTitle("New User Summary");
+//        newUserSummaryDialog.setMessage(newUserSummaryText);
+//        newUserSummaryDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                finish();
+//                Toast.makeText(getApplicationContext(), "Thank you!", Toast.LENGTH_LONG).show();
+//            }
+//        });
+//
+//        newUserSummaryDialog.show();
     }
 
     private FieldOfStudy buildFieldOfStudy() {
@@ -242,13 +242,12 @@ public class SettingsActivity extends ActionBarActivity {
 
     private void addDrawerItems() {
         String[] osArray = {"Checklist", "Back to Login"};
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
+        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Toast.makeText(SettingsActivity.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
                 switch (position) {
                     case 0:
                         Intent a = new Intent(SettingsActivity.this, ChecklistActivity.class);

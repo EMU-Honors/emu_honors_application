@@ -21,6 +21,11 @@ public class RequirementFactory {
 
         JSONObject handbook = instance.handbookRequest(yearStr, typeStr);
 
+        if (handbook == null)
+        {
+            return RequirementsList.getSampleRequirementsList();
+        }
+
         ArrayList<Requirement> requirementsToAdd = new ArrayList<>();
         String lastJsonRequirement = "";
         int requirementIndex = -1;

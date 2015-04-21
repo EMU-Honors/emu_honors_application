@@ -18,9 +18,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Jordan on 4/15/2015.
- */
 public class DB_Handler {
 
     private static DB_Handler instance;
