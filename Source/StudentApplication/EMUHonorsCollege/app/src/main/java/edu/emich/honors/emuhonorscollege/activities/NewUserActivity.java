@@ -133,22 +133,28 @@ public class NewUserActivity extends ActionBarActivity {
                 honorsTypes, eID, fieldOfStudy, graduationDate);
 
         //Show attributes of the newly created User
+        showNewUserInformationDialog(newUser);
+    }
+
+    private void showNewUserInformationDialog(User user)
+    {
         String honorsTypesString = "";
 
-        for (HonorsType type : newUser.getHonorsTypes()) {
+        for (HonorsType type : user.getHonorsTypes()) {
             honorsTypesString += type.toString() + "\n";
         }
 
         String newUserSummaryText =
-                "First Name: " + newUser.getFirstName() +
-                        "\nLast Name: " + newUser.getLastName() +
-                        "\nEmail: " + newUser.getEmail() +
-                        "\nPassword: " + password +
-                        "\nEID: " + newUser.getEID() +
+                "First Name: " + user.getFirstName() +
+                        "\nLast Name: " + user.getLastName() +
+                        "\nEmail: " + user.getEmail() +
+                        "\nPassword: " + user.getPassword() +
+                        "\nEID: " + user.getEID() +
+                        "\nHandbook Year: " + user.getHandbook().getHandbookYear() +
                         "\nHonors Types: " + honorsTypesString +
-                        "\nMajor: " + newUser.getFieldOfStudy().getMajors().get(0).toString() +
-                        "\nMinor: " + newUser.getFieldOfStudy().getMinors().get(0).toString() +
-                        "\nGraduation Date: " + newUser.getGraduationDate().getTerm() + " " + newUser.getGraduationDate().getYear();
+                        "\nMajor: " + user.getFieldOfStudy().getMajors().get(0).toString() +
+                        "\nMinor: " + user.getFieldOfStudy().getMinors().get(0).toString() +
+                        "\nGraduation Date: " + user.getGraduationDate().getTerm() + " " + user.getGraduationDate().getYear();
 
         AlertDialog.Builder newUserSummaryDialog = new AlertDialog.Builder(this);
         newUserSummaryDialog.setTitle("New User Summary");

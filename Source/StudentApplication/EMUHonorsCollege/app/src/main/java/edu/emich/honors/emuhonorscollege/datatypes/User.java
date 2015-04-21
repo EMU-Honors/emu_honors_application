@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import edu.emich.honors.emuhonorscollege.datatypes.enums.AcademicProgram;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.GraduationTerm;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
@@ -34,7 +35,7 @@ public class User implements Serializable {
 
     public static User getSampleUser() {
         ArrayList<HonorsType> sampleHonorsType = new ArrayList<>(Arrays.asList(HonorsType.DEPARTMENTAL));
-        User sampleUser = new User("jsmith@emich.edu", "password".toCharArray(), "John", "Smith", HonorsHandbook.getSampleHandbook(), sampleHonorsType, "E03487695", null, new GraduationDate(GraduationTerm.FALL, "2018"));
+        User sampleUser = new User("jsmith@emich.edu", "password".toCharArray(), "John", "Smith", HonorsHandbook.getSampleHandbook(), sampleHonorsType, "E03487695", new FieldOfStudy(AcademicProgram.COMPUTER_SCIENCE, AcademicProgram.MATH), new GraduationDate(GraduationTerm.FALL, "2018"));
         return sampleUser;
     }
 

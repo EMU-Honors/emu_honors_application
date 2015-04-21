@@ -41,8 +41,8 @@ public class HonorsHandbook implements Serializable {
 
     public static HonorsHandbook getSampleHandbook() {
 //        HonorsHandbook sampleHandbook = new HonorsHandbook(HandbookYear.YEAR_2014, RequirementsList.getSampleRequirementsList(), null, null);
-        HonorsHandbook sampleHandbook = new HonorsHandbook(HandbookYear.YEAR_2014,
-                RequirementFactory.createRequirementsList(HandbookYear.YEAR_2007, HonorsType.UNIVERSITY),
+        HonorsHandbook sampleHandbook = new HonorsHandbook(HandbookYear.YEAR_2007,
+                RequirementFactory.createRequirementsList(HandbookYear.YEAR_2007, HonorsType.DEPARTMENTAL),
                 null,
                 null);
         return sampleHandbook;

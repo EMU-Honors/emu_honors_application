@@ -34,9 +34,12 @@ public class RequirementFactory {
                     lastJsonRequirement = currentJsonRequirement.getString("requirement_name");
                     requirementsToAdd.add(++requirementIndex, new Requirement(lastJsonRequirement, 1, new LinkedList<String>()));
                 }
-                requirementsToAdd.get(requirementIndex).addComponent(new Requirement(currentJsonRequirement.getString("name"),
+
+                Requirement requirementToAdd = new Requirement(
+                        currentJsonRequirement.getString("name"),
                         currentJsonRequirement.getInt("total"),
-                        new LinkedList<>(Arrays.asList(currentJsonRequirement.getString("description")))));
+                        new LinkedList<>(Arrays.asList(currentJsonRequirement.getString("description"))));
+                requirementsToAdd.get(requirementIndex).addComponent(requirementToAdd);
             }
         } catch (JSONException e) {
             e.printStackTrace();
