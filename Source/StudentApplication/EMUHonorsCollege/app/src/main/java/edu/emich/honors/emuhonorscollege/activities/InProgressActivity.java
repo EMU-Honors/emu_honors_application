@@ -26,10 +26,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import edu.emich.honors.emuhonorscollege.HonorsApplication;
 import edu.emich.honors.emuhonorscollege.R;
 import edu.emich.honors.emuhonorscollege.datatypes.Requirement;
 import edu.emich.honors.emuhonorscollege.datatypes.RequirementsList;
-import edu.emich.honors.emuhonorscollege.datatypes.enums.HandbookYear;
+import edu.emich.honors.emuhonorscollege.datatypes.User;
 import edu.emich.honors.emuhonorscollege.datatypes.enums.HonorsType;
 
 
@@ -42,7 +43,7 @@ public class InProgressActivity extends ActionBarActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private String mActivityTitle;
     private ArrayList<Requirement> mRequirements;
-    // private User user = new User();
+    private User currentUser = User.getSampleUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,27 +65,10 @@ public class InProgressActivity extends ActionBarActivity {
         //Checklist Setup
         LinearLayout parentLayout = (LinearLayout) findViewById(R.id.checklist_linear_layout);
 
-        //        Placeholder for a real list of requirements pulled from the DB
-        ArrayList<Requirement> tempListOfRequirements = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            LinkedList<String> dummyCoachingSteps = new LinkedList<String>();
-            dummyCoachingSteps.add("Did you put your left foot in?");
-            dummyCoachingSteps.add("Did you put your left foot out?");
-            dummyCoachingSteps.add("Did you put your left foot in and shake it all about?");
 
-            Requirement tempComponent = new Requirement("Requirement " + i, 3, dummyCoachingSteps);
-            if (i % 2 == 0) {
-                tempComponent.setNumberOfCompleted(3);
-            } else {
-                tempComponent.addComponent(new Requirement());
-                tempComponent.setInProgress(true);
-            }
-            tempListOfRequirements.add(tempComponent);
-        }
-        RequirementsList requirementsList = new RequirementsList(HandbookYear.YEAR_2014, HonorsType.UNIVERSITY, tempListOfRequirements);
+        RequirementsList requirementsList = currentUser.getHandbook().getRequirementsList(HonorsType.DEPARTMENTAL);
 
-
-        buildCheckList(tempListOfRequirements, parentLayout);
+        buildCheckList(requirementsList.getRequirements(), parentLayout);
     }
 
     public void buildCheckList(ArrayList<Requirement> listOfRequirements, LinearLayout parentLayout) {

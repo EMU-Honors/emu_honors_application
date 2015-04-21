@@ -6,7 +6,7 @@ import edu.emich.honors.emuhonorscollege.datatypes.User;
 
 public class HonorsApplication extends Application {
 
-    private static User currentUser;
+    private static User currentUser = User.getSampleUser();
 
     public User getCurrentUser() {
         return currentUser;
