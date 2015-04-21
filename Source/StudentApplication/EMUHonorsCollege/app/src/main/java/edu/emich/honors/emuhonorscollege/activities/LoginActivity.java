@@ -27,14 +27,6 @@ import edu.emich.honors.emuhonorscollege.datatypes.User;
 
 public class LoginActivity extends ActionBarActivity {
 
-    private Button newUserButton;
-    private Button submitButton;
-    private ListView mDrawerList;
-    private DrawerLayout mDrawerLayout;
-    private ArrayAdapter<String> mAdapter;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private String mActivityTitle;
-
     private TextView userNameField;
     private TextView userPassField;
 
@@ -45,41 +37,10 @@ public class LoginActivity extends ActionBarActivity {
 
         DB_Handler.getInstance(getApplicationContext());
 
-        newUserButton = (Button) findViewById(R.id.login_new_user);
-        submitButton = (Button) findViewById(R.id.login_submit);
-        mDrawerList = (ListView) findViewById(R.id.navList);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mActivityTitle = getTitle().toString();
-
         this.userNameField = (TextView) findViewById(R.id.login_email);
         this.userPassField = (TextView) findViewById(R.id.login_password);
-
-        addDrawerItems();
-        setupDrawer();
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        // Activate the navigation drawer toggle
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     public void goToNewUserPage(View view) {
         startActivity(new Intent(this, NewUserActivity.class));
@@ -87,83 +48,38 @@ public class LoginActivity extends ActionBarActivity {
 
     public void submitLoginCredentials(View view) {
         DB_Handler instance = DB_Handler.getInstance(getApplicationContext());
-        JSONObject login = instance.login(this.userNameField.getText().toString(), this.userPassField.getText().toString());
-        String response = "fail";
-        try {
-            Log.d("hi", login.getString("response"));
-            response = login.getString("response");
-            if (response.equals("success")) {
-                Log.d("name", login.getString("content"));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        String username = this.userNameField.getText().toString().toLowerCase();
+        String password = this.userPassField.getText().toString();
+
+        if (username.isEmpty() || password.isEmpty())
+        {
+            Toast.makeText(getApplicationContext(), "Invalid Username/Password", Toast.LENGTH_SHORT).show();
         }
+        else {
+            JSONObject login = instance.login(username, password);
 
-        if (response.equals("success")) {
-            ((HonorsApplication) this.getApplication()).setCurrentUser(User.getSampleUser());
-            startActivity(new Intent(this, ChecklistActivity.class));
-        } else {
-            Toast.makeText(getApplicationContext(), "Invalid Username/Password!", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    private void addDrawerItems() {
-        String[] osArray = {"Settings", "Checklist"};
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
-        mDrawerList.setAdapter(mAdapter);
-
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                switch (position) {
-                    case 0:
-                        Intent a = new Intent(LoginActivity.this, SettingsActivity.class);
-                        startActivity(a);
-                        break;
-                    case 1:
-                        Intent b = new Intent(LoginActivity.this, ChecklistActivity.class);
-                        startActivity(b);
-                        break;
-                    default:
+            String response = "fail";
+            try {
+                if (login.getString("response").equals("fail")) {
+                    Toast.makeText(getApplicationContext(), "Invalid Username/Password", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.d("hi", login.getString("response"));
+                    response = login.getString("response");
+                    if (response.equals("success")) {
+                        Log.d("name", login.getString("content"));
+                    }
                 }
-            }
-        });
-    }
-
-    private void setupDrawer() {
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
-
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Navigation!");
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
 
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(mActivityTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            if (response.equals("success")) {
+                ((HonorsApplication) this.getApplication()).setCurrentUser(User.getSampleUser());
+                startActivity(new Intent(this, ChecklistActivity.class));
+            } else {
+                Toast.makeText(getApplicationContext(), "Invalid Username/Password", Toast.LENGTH_SHORT).show();
             }
-        };
+        }
 
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 }

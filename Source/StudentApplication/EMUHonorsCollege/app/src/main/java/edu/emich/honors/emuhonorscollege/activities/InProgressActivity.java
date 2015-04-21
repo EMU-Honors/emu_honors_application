@@ -1,10 +1,5 @@
 package edu.emich.honors.emuhonorscollege.activities;
 
-/**
- * Created by Travis on 4/14/2015.
- */
-
-
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -251,7 +246,7 @@ public class InProgressActivity extends ActionBarActivity {
     }
 
     private void addDrawerItems() {
-        String[] osArray = {"Settings", "Back to Login", "In Progress"};
+        String[] osArray = {"Settings", "Logout", "Checklist"};
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mAdapter);
 
@@ -268,7 +263,7 @@ public class InProgressActivity extends ActionBarActivity {
                         startActivity(b);
                         break;
                     case 2:
-                        Intent c = new Intent(InProgressActivity.this, InProgressActivity.class);
+                        Intent c = new Intent(InProgressActivity.this, ChecklistActivity.class);
                         startActivity(c);
                         break;
                     default:
@@ -283,7 +278,7 @@ public class InProgressActivity extends ActionBarActivity {
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Navigation!");
+                getSupportActionBar().setTitle("Navigation");
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
 

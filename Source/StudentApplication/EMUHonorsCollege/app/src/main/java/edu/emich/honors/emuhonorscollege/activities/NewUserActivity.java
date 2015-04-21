@@ -94,7 +94,7 @@ public class NewUserActivity extends ActionBarActivity {
     }
 
     public void submitNewUser(View view) {
-        String email = emailEditText.getText().toString();
+        String email = emailEditText.getText().toString().toLowerCase();
         char[] password = passwordEditText.getText().toString().toCharArray();
         String firstName = firstNameEditText.getText().toString();
         String lastName = lastNameEditText.getText().toString();

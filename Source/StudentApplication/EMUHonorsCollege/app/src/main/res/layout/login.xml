@@ -17,7 +17,7 @@
             android:inputType="textEmailAddress"
             android:ems="10"
             android:id="@+id/login_email"
-            android:text="Email"
+            android:hint="Email"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
 
@@ -28,7 +28,7 @@
             android:ems="10"
             android:id="@+id/login_password"
             android:layout_gravity="center_horizontal"
-            android:text="Password"
+            android:hint="Password"
             android:layout_below="@+id/login_email"
             android:layout_centerHorizontal="true" />
 
