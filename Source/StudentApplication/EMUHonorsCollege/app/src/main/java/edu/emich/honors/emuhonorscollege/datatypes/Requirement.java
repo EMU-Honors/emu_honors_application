@@ -1,50 +1,51 @@
 package edu.emich.honors.emuhonorscollege.datatypes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
-/**
- * Created by stefano on 3/21/15.
- */
-public class Requirement{
+public class Requirement implements Serializable {
     private String name;
     private String description;
-    private ArrayList<Requirement> subRequirements;
+    private ArrayList<Requirement> components;
     private boolean completed;
     private int numberOfCompleted;
     private int numberRequiredForCompletion;
     private int hierarchyLevel;
+    private LinkedList<String> coachingSteps;
+    private LinkedList<String> persistentCoachingSteps;
+    private boolean isInProgress = false;
+    private Requirement parentRequirement;
 
     public Requirement() {
         this.name = "";
         this.description = "";
-        this.subRequirements = new ArrayList<Requirement>();
+        this.components = new ArrayList<>();
         this.completed = false;
         this.numberOfCompleted = 0;
         this.numberRequiredForCompletion = 1;
-        this.hierarchyLevel = 1;
+        this.hierarchyLevel = 0;
+        this.coachingSteps = new LinkedList<>();
+        this.persistentCoachingSteps = new LinkedList<>();
+        this.parentRequirement = null;
     }
 
-    public Requirement(String requirementName, String description, int numberRequiredForCompletion) {
+    public Requirement(String requirementName,
+                       int numberRequiredForCompletion,
+                       LinkedList<String> coachingSteps) {
         this();
         this.name = requirementName;
-        this.description = description;
         this.numberRequiredForCompletion = numberRequiredForCompletion;
+        this.coachingSteps = coachingSteps;
+        this.persistentCoachingSteps = new LinkedList<>(coachingSteps);
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public int getNumberOfCompleted() {
@@ -60,22 +61,93 @@ public class Requirement{
         return numberRequiredForCompletion;
     }
 
-    public void setNumberRequiredForCompletion(int numberRequiredForCompletion) {
-        this.numberRequiredForCompletion = numberRequiredForCompletion;
-        completed = (this.getNumberOfCompleted() >= this.getNumberRequiredForCompletion());
+    public boolean hasComponent() {
+        return !this.getComponents().isEmpty();
     }
 
-    public ArrayList<Requirement> getSubRequirements() {
-        return subRequirements;
+    public ArrayList<Requirement> getComponents() {
+        return components;
     }
 
     public boolean isCompleted() {
-        return completed;
+        boolean isCompleteFlag = true;
+
+        if (this.hasComponent()) {
+            for (Requirement component : components) {
+                if (!component.isCompleted()) {
+                    isCompleteFlag = false;
+                    break;
+                }
+            }
+        } else {
+            isCompleteFlag = completed;
+        }
+
+        return isCompleteFlag;
     }
 
-    public void addSubRequirement(Requirement subRequirementToAdd)
-    {
-        subRequirementToAdd.hierarchyLevel++;
-        subRequirements.add(subRequirementToAdd);
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+        if (this.hasParentRequirement()) {
+            this.getParentRequirement().isInProgress();
+        }
+    }
+
+    public void addComponent(Requirement componentToAdd) {
+        componentToAdd.setParentRequirement(this);
+        componentToAdd.hierarchyLevel++;
+        components.add(componentToAdd);
+    }
+
+    public LinkedList<String> getCoachingSteps() {
+//        LinkedList<String> coachingStepsCopy = new LinkedList<>(coachingSteps);
+        return coachingSteps;
+    }
+
+    public int getHierarchyLevel() {
+        return hierarchyLevel;
+    }
+
+    public boolean isInProgress() {
+        if (this.isCompleted())
+            return false;
+
+        if (this.hasComponent()) {
+            for (Requirement component : components) {
+                if (component.isCompleted()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;  // Can't be in progress if no components
+
+    }
+
+    public void setInProgress(boolean isInProgress) {
+        this.isInProgress = isInProgress;
+    }
+
+    public boolean hasParentRequirement() {
+        return parentRequirement != null;
+    }
+
+    public Requirement getParentRequirement() {
+        return parentRequirement;
+    }
+
+    private void setParentRequirement(Requirement parentRequirement) {
+        this.parentRequirement = parentRequirement;
+    }
+
+    public void resetCoachingSteps() {
+        this.coachingSteps = new LinkedList<>(persistentCoachingSteps);
+    }
+
+    public void resetProgress() {
+        this.completed = false;
+        this.isInProgress = false;
+        this.numberOfCompleted = 0;
+        resetCoachingSteps();
     }
 }

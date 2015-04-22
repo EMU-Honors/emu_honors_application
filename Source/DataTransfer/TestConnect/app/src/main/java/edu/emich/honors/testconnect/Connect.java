@@ -34,6 +34,7 @@ public class Connect extends ActionBarActivity {
 
     Button theButton;
     TextView theOutput;
+<<<<<<< HEAD
     DB_Handler the_dbs;
     private SQLiteHelper localDB;
 
@@ -63,6 +64,31 @@ public class Connect extends ActionBarActivity {
 
 
                theOutput.setText((CharSequence) the_dbs.handbookRequest("2007","university").toString());
+=======
+    private SQLiteHelper localDB;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_connect);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        this.theButton = (Button) findViewById(R.id.theTestButton);
+        this.theOutput = (TextView) findViewById(R.id.outputTextView);
+
+        this.theButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(getBaseContext(),"hi",Toast.LENGTH_LONG).show();
+                //theOutput.append(" clicked");
+                //Toast.makeText(getBaseContext(), doASomething(), Toast.LENGTH_LONG).show();
+                String result = doASomething();
+                result = "{ requirements:" + result + "}";  //JSONarray -> JSONobject
+                String afterParse = parseJSON(result);
+                theOutput.setText(afterParse);  //display results after parsing JSON
+>>>>>>> refs/heads/Android
             }
 
         });

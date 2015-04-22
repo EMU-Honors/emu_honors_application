@@ -11,8 +11,7 @@ public enum AcademicProgram {
 
     private String name;
 
-    private AcademicProgram(String s)
-    {
+    private AcademicProgram(String s) {
         name = s;
     }
 

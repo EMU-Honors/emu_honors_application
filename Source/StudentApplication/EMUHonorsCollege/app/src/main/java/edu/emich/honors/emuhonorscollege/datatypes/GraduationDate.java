@@ -1,30 +1,28 @@
 package edu.emich.honors.emuhonorscollege.datatypes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import edu.emich.honors.emuhonorscollege.datatypes.enums.GraduationTerm;
 
-public class GraduationDate {
+public class GraduationDate implements Serializable {
+    private static final int numberOfYearsToShow = 6;
     private GraduationTerm term;
     private String year;
-    private static final int numberOfYearsToShow = 6;
 
-    public GraduationDate(GraduationTerm term, String year)
-    {
+    public GraduationDate(GraduationTerm term, String year) {
         this.term = term;
         this.year = year;
     }
 
-    public static ArrayList<String> getListOfCurrentGraduationYears()
-    {
+    public static ArrayList<String> getListOfCurrentGraduationYears() {
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         int maxYearToShow = currentYear + numberOfYearsToShow;
         ArrayList<String> currentGraduationYears = new ArrayList<String>();
 
-        for (int yearToAdd = currentYear; yearToAdd <= maxYearToShow; yearToAdd++)
-        {
-                currentGraduationYears.add(String.valueOf(yearToAdd));
+        for (int yearToAdd = currentYear; yearToAdd <= maxYearToShow; yearToAdd++) {
+            currentGraduationYears.add(String.valueOf(yearToAdd));
         }
 
         return currentGraduationYears;

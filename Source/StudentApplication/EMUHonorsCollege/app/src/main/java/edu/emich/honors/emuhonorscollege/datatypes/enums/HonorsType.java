@@ -8,8 +8,7 @@ public enum HonorsType {
 
     private String name;
 
-    private HonorsType(String s)
-    {
+    private HonorsType(String s) {
         name = s;
     }
 
