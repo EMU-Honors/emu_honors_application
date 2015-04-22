@@ -34,7 +34,6 @@ public class Connect extends ActionBarActivity {
 
     Button theButton;
     TextView theOutput;
-<<<<<<< HEAD
     DB_Handler the_dbs;
     private SQLiteHelper localDB;
 
@@ -89,7 +88,6 @@ public class Connect extends ActionBarActivity {
                 String afterParse = parseJSON(result);
                 theOutput.setText(afterParse);  //display results after parsing JSON
 
-=======
     private SQLiteHelper localDB;
 
     @Override
@@ -113,7 +111,7 @@ public class Connect extends ActionBarActivity {
                 result = "{ requirements:" + result + "}";  //JSONarray -> JSONobject
                 String afterParse = parseJSON(result);
                 theOutput.setText(afterParse);  //display results after parsing JSON
->>>>>>> refs/heads/Android
+
             }
 
         });
