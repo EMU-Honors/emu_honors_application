@@ -6,8 +6,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name="HonorsApplication">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/app_name">
@@ -23,8 +22,6 @@
             </activity>
         <activity android:name=".activities.ChecklistActivity"></activity>
         <activity android:name=".activities.SettingsActivity"></activity>
-        <activity android:name=".activities.InProgressActivity"></activity>
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
